@@ -1,8 +1,9 @@
-import { Schema, Types, model } from "mongoose";
+import { InferSchemaType, Schema, Types, model } from "mongoose";
 import { USER_MODEL } from "./User.model";
 import { ARTICLE_MODEL } from "./Article.model";
 
 export const FEEDBACK_MODEL = "Feedback";
+export type TFeedback = InferSchemaType<typeof FeedbackModel.schema>;
 
 export default class FeedbackModel {
     static get schema() {

@@ -1,7 +1,8 @@
-import { Schema, Types, model } from "mongoose";
+import { InferSchemaType, Schema, Types, model } from "mongoose";
 import { ARTICLE_MODEL } from "./Article.model";
 
 export const COLLECTION_MODEL = "Collection";
+export type TCollection = InferSchemaType<typeof CollectionModel.schema>;
 
 export default class CollectionModel {
     static get schema() {
