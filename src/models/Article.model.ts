@@ -1,4 +1,4 @@
-import { InferSchemaType, Schema, Types, model } from "mongoose";
+import { Document, InferSchemaType, Schema, Types, model } from "mongoose";
 import { USER_MODEL } from "./User.model";
 import { SECTION_MODEL, SECTION_TYPES } from "./Section.model";
 import { REACTION_MODEL } from "./Reaction.model";
@@ -6,6 +6,7 @@ import { FEEDBACK_MODEL } from "./Feedback.model";
 
 export const ARTICLE_MODEL = "Article";
 export type TArticle = InferSchemaType<typeof ArticleModel.schema>;
+export type ArticleDocument = Document<unknown, {}, TArticle> & TArticle;
 
 export default class ArticleModel {
     static get schema() {

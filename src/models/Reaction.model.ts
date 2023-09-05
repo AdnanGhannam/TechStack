@@ -1,10 +1,11 @@
-import { InferSchemaType, Schema, Types, model } from "mongoose";
+import { Document, InferSchemaType, Schema, Types, model } from "mongoose";
 import { USER_MODEL } from "./User.model";
 import { ARTICLE_MODEL } from "./Article.model";
 
 export const REACTION_MODEL = "Reaction";
 export const REACTION_TYPES = ["like", "dislike"];
 export type TReaction = InferSchemaType<typeof ReactionModel.schema>;
+export type ReactionDocument = Document<unknown, {}, TReaction> & TReaction;
 
 export default class ReactionModel {
     static get schema() {

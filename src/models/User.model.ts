@@ -1,9 +1,10 @@
-import { InferSchemaType, Schema, Types, model } from "mongoose";
+import { Document, InferSchemaType, Schema, Types, model } from "mongoose";
 import { COLLECTION_MODEL } from "./Collection.model";
 
 export const USER_MODEL = "User";
 export const PRIVILEGES = ["user", "administrator"];
 export type TUser = InferSchemaType<typeof UserModel.schema>;
+export type UserDocument = Document<unknown, {}, TUser> & TUser;
 
 export default class UserModel {
     static get schema() {

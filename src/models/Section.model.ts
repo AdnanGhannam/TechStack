@@ -1,10 +1,11 @@
-import { InferSchemaType, Schema, Types, model } from "mongoose";
+import { Document, InferSchemaType, Schema, Types, model } from "mongoose";
 import { USER_MODEL } from "./User.model";
 import { ARTICLE_MODEL } from "./Article.model";
 
 export const SECTION_MODEL = "Section";
 export const SECTION_TYPES = ["tutorial", "reference"];
 export type TSection = InferSchemaType<typeof SectionModel.schema>;
+export type SectionDocument = Document<unknown, {}, TSection> & TSection;
 
 export default class SectionModel {
     static get schema() {
