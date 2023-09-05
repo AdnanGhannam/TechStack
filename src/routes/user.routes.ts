@@ -1,35 +1,51 @@
 import { Express } from "express";
+import controller from "../controllers/users.controller";
 
 export const LOGIN = "/login";
 export const REGISTER = "/register";
-export const GET_USER = "/users/:id";
+export const GET_USER = "/user";
 export const UPDATE_USER = "/user";
 export const REMOVE_USER = "/user";
+export const GET_USER_BY_ID = "/users/:id";
 export const UPDATE_USER_BY_ID = "/users/:id";
 export const REMOVE_USER_BY_ID = "/users/:id";
 export const GET_COLLECTION = "/collection";
 export const ADD_TO_COLLECTION = "/collection/:id";
 export const REMOVE_FROM_COLLECTION = "/collection/:id";
 
-
 const userRoutes = (app: Express) => {
-    app.post(LOGIN, [], );
+    app.post(LOGIN,
+        [], controller.loginEndpoint);
 
-    app.post(REGISTER, [], );
+    app.post(REGISTER,
+        [], controller.registerEndpoint);
 
-    app.get(GET_USER, [], );
+    app.get(GET_USER,
+        [], controller.getEndpoint);
 
-    app.put(UPDATE_USER, [], );
+    app.put(UPDATE_USER,
+        [], controller.updateEndpoint);
         
-    app.delete(REMOVE_USER, [], );
+    app.delete(REMOVE_USER,
+        [], controller.removeEndpoint);
 
-    app.delete(REMOVE_USER_BY_ID, [], );
+    app.get(GET_USER_BY_ID,
+        [], controller.getByIdEndpoint);
 
-    app.get(GET_COLLECTION, [], );
+    app.put(UPDATE_USER_BY_ID,
+        [], controller.updateByIdEndpoint);
 
-    app.post(ADD_TO_COLLECTION, [], );
+    app.delete(REMOVE_USER_BY_ID,
+        [], controller.removeByIdEndpoint);
 
-    app.delete(REMOVE_FROM_COLLECTION, [], );
+    app.get(GET_COLLECTION,
+        [], controller.getCollectionEndpoint);
+
+    app.post(ADD_TO_COLLECTION,
+        [], controller.addToCollectionEndpoint);
+
+    app.delete(REMOVE_FROM_COLLECTION,
+        [], controller.removeFromCollectionEndpoint);
 };
 
 export default userRoutes;
