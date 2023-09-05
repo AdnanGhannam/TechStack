@@ -30,7 +30,7 @@ export default class SectionModel {
                 type: Types.ObjectId,
                 ref: USER_MODEL
             },
-            children: [{
+            articles: [{
                 type: Types.ObjectId,
                 ref: ARTICLE_MODEL
             }]

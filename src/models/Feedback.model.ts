@@ -12,7 +12,7 @@ export default class FeedbackModel {
                 type: Types.ObjectId,
                 ref: USER_MODEL
             },
-            post: {
+            article: {
                 type: Types.ObjectId,
                 ref: ARTICLE_MODEL
             },

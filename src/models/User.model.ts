@@ -18,7 +18,7 @@ export default class UserModel {
             email: {
                 type: String,
                 required: true,
-                match: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                 unique: true
             },
             password: {
@@ -44,6 +44,13 @@ export default class UserModel {
 
     static create() {
         const schema = this.schema;
+        schema.methods.toJSON = function() {
+            const user = this;
+            const userObject = user.toObject();
+            delete userObject.password;
+            return userObject;
+        }
+
         return model(USER_MODEL, schema);
     }
 }

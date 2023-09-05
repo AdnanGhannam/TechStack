@@ -7,7 +7,7 @@ export type TCollection = InferSchemaType<typeof CollectionModel.schema>;
 export default class CollectionModel {
     static get schema() {
         return new Schema({
-            posts: [{
+            articles: [{
                 type: Types.ObjectId,
                 ref: ARTICLE_MODEL
             }],
