@@ -1,5 +1,8 @@
 import { Express } from "express";
 import controller from "../controllers/sections.controller";
+import sectionMiddlewares from "../middlewares/section.middlewares";
+import auth from "../middlewares/auth.middlewares";
+import middlewares from "../middlewares/middlewares";
 
 export const CREATE_SECTION = "/sections"
 export const GET_ALL_SECTIONS = "/sections";
@@ -10,22 +13,46 @@ export const ADD_TO_SECTION = "/sections/article/:id";
 
 const sectionRoutes = (app: Express) => {
     app.post(CREATE_SECTION,
-        [], controller.createEndpoint);
+        [
+            auth.authenticate, 
+            auth.authorize,
+            sectionMiddlewares.getBody
+        ], controller.createEndpoint);
 
     app.get(GET_ALL_SECTIONS,
-        [], controller.getAllEndpoint);
+        [
+            sectionMiddlewares.checkSectionType
+        ], controller.getAllEndpoint);
 
     app.get(GET_SECTION,
-        [], controller.getByIdEndpoint);
+        [
+            middlewares.checkId,
+            sectionMiddlewares.getSection
+        ], controller.getByIdEndpoint);
 
     app.put(UPDATE_SECTION,
-        [], controller.updateEndpoint);
+        [
+            auth.authenticate, 
+            auth.authorize,
+            middlewares.checkId,
+            sectionMiddlewares.getSection
+        ], controller.updateEndpoint);
 
     app.delete(REMOVE_SECTION,
-        [], controller.removeEndpoint);
+        [
+            auth.authenticate, 
+            auth.authorize,
+            middlewares.checkId,
+            sectionMiddlewares.getSection
+        ], controller.removeEndpoint);
 
     app.post(ADD_TO_SECTION,
-        [], controller.addToEndpoint);
+        [
+            auth.authenticate, 
+            auth.authorize,
+            middlewares.checkId,
+            sectionMiddlewares.getSection
+        ], controller.addToEndpoint);
 };
 
 export default sectionRoutes;
