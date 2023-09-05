@@ -1,6 +1,7 @@
 import { Express } from "express";
 import controller from "../controllers/users.controller";
 import userMiddlewares from "../middlewares/user.middlewares";
+import articleMiddlewares from "../middlewares/article.middlewares";
 import auth from "../middlewares/auth.middlewares";
 import middlewares from "../middlewares/middlewares";
 
@@ -73,13 +74,23 @@ const userRoutes = (app: Express) => {
         ], controller.removeByIdEndpoint);
 
     app.get(GET_COLLECTION,
-        [], controller.getCollectionEndpoint);
+        [
+            auth.authenticate
+        ], controller.getCollectionEndpoint);
 
     app.post(ADD_TO_COLLECTION,
-        [], controller.addToCollectionEndpoint);
+        [
+            auth.authenticate,
+            middlewares.checkId,
+            articleMiddlewares.getArticle,
+        ], controller.addToCollectionEndpoint);
 
     app.delete(REMOVE_FROM_COLLECTION,
-        [], controller.removeFromCollectionEndpoint);
+        [
+            auth.authenticate,
+            middlewares.checkId,
+            articleMiddlewares.getArticle,
+        ], controller.removeFromCollectionEndpoint);
 };
 
 export default userRoutes;
