@@ -4,6 +4,7 @@ import env from "../config/env.config";
 import { httpError } from "../helpers/response.helpers";
 import { Types } from "mongoose";
 import db from "../models/models";
+import { UserDocument } from "../models/User.model";
 
 /**
  * @passes loginUser
@@ -54,7 +55,7 @@ const authenticate: RequestHandler = (req, res, next) => {
  * @passes Privilege
 */
 const authorize: RequestHandler = async (req, res, next) => {
-    const { loginUser } = res.locals;
+    const { loginUser } = res.locals as { loginUser: UserDocument };
 
     if (loginUser.privilege != "administrator") {
         res.status(401)

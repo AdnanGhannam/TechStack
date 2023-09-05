@@ -5,9 +5,11 @@ import { httpError, httpSuccess } from "../helpers/response.helpers";
 import { Types } from "mongoose";
 import db from "../models/models";
 import { tryHandle } from "../helpers/controller.helpers";
+import { UserDocument } from "../models/User.model";
+import { ArticleDocument } from "../models/Article.model";
 
 const loginEndpoint: RequestHandler = (req, res) => {
-    const { user } = res.locals;
+    const { user } = res.locals as { user: UserDocument };
     const { SECRET } = env;
 
     const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: "3h"});
@@ -35,19 +37,20 @@ const registerEndpoint: RequestHandler = (req, res) => {
 };
 
 const getEndpoint: RequestHandler = (req, res) => {
-    const { loginUser } = res.locals;
+    const { loginUser } = res.locals as { loginUser: UserDocument };
 
     res.status(200).json(httpSuccess(loginUser));
 };
 
 const getByIdEndpoint: RequestHandler = (req, res) => {
-    const { user } = res.locals;
+    const { user } = res.locals as { user: UserDocument };
 
     res.status(200).json(httpSuccess(user));
 };
 
 const updateEndpoint: RequestHandler = (req, res) => {
-    const { loginUser: user, name, email } = res.locals;
+    const { name, email } = res.locals;
+    const { loginUser: user } = res.locals as { loginUser: UserDocument };
 
     tryHandle(res, async () => {
         db.User.updateOne()
@@ -61,7 +64,8 @@ const updateEndpoint: RequestHandler = (req, res) => {
 };
 
 const removeEndpoint: RequestHandler = async (req, res) => {
-    const { loginUser: user } = res.locals;
+    const { loginUser: user } = res.locals as { loginUser: UserDocument };
+
     const collection = await db.Collection.findById(user.userCollection);
 
     tryHandle(res, async () => {
@@ -73,7 +77,8 @@ const removeEndpoint: RequestHandler = async (req, res) => {
 };
 
 const updateByIdEndpoint: RequestHandler = (req, res) => {
-    const { user, name, email } = res.locals;
+    const { name, email } = res.locals;
+    const { user } = res.locals as { user: UserDocument };
 
     tryHandle(res, async () => {
         db.User.updateOne()
@@ -87,7 +92,8 @@ const updateByIdEndpoint: RequestHandler = (req, res) => {
 };
 
 const removeByIdEndpoint: RequestHandler = async (req, res) => {
-    const { user } = res.locals;
+    const { user } = res.locals as { user: UserDocument };
+
     const collection = await db.Collection.findById(user.userCollection);
 
     tryHandle(res, async () => {
@@ -99,7 +105,7 @@ const removeByIdEndpoint: RequestHandler = async (req, res) => {
 };
 
 const getCollectionEndpoint: RequestHandler = async (req, res) => {
-    const { loginUser } = res.locals;
+    const { loginUser } = res.locals as { loginUser: UserDocument };
 
     const collection = await db.Collection.findById(loginUser.userCollection).populate("articles");
 
@@ -107,14 +113,20 @@ const getCollectionEndpoint: RequestHandler = async (req, res) => {
 };
 
 const addToCollectionEndpoint: RequestHandler = async (req, res) => {
-    const { loginUser: user, article } = res.locals;
+    const {
+        loginUser: user,
+        article
+    } = res.locals as {
+        loginUser: UserDocument,
+        article: ArticleDocument
+    };
 
     const collection = (await db.Collection.findById(user.userCollection))!;
 
     // Check if exists
     if (collection.articles.indexOf(article.id) != -1) {
         res.status(400)
-            .json(httpError("You already have this post in your collection"));
+            .json(httpError("You already have this article in your collection"));
         return;
     }
 
@@ -134,11 +146,19 @@ const addToCollectionEndpoint: RequestHandler = async (req, res) => {
 };
 
 const removeFromCollectionEndpoint: RequestHandler = async (req, res) => {
-    const { loginUser: user, post } = res.locals;
+    const {
+        loginUser: user,
+        article
+    } = res.locals as {
+        loginUser: UserDocument,
+        article: ArticleDocument
+    };
+
     const collection = await db.Collection.findById(user?.userCollection);
 
     tryHandle(res, async () => {
-        await collection?.updateOne({ $pull: { posts: post.id }});
+        await collection?.updateOne({ $pull: { articles: article.id }});
+
         res.status(204).end();
     });
 };

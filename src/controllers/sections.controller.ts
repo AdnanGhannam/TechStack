@@ -1,15 +1,17 @@
 import { RequestHandler } from "express";
-import { TArticle } from "../models/Article.model";
+import { ArticleDocument } from "../models/Article.model";
 import { tryHandle } from "../helpers/controller.helpers";
-import { Document, Model, Types } from "mongoose";
+import { Types } from "mongoose";
 import db from "../models/models";
 import { httpMongoError, httpSuccess } from "../helpers/response.helpers";
+import { UserDocument } from "../models/User.model";
+import { SectionDocument } from "../models/Section.model";
 
 const createEndpoint: RequestHandler = (req, res) => {
-    const { loginUser } = res.locals;
+    const { loginUser } = res.locals as { loginUser: UserDocument };
     const { title, type, article: { articleTitle, description, content } } = res.locals;
 
-    let newArticle: Document<unknown, {}, TArticle> | undefined = undefined;
+    let newArticle: ArticleDocument | undefined = undefined;
     tryHandle(res, async () =>  {
         const articleId = new Types.ObjectId();
 
@@ -42,6 +44,7 @@ const createEndpoint: RequestHandler = (req, res) => {
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
     const { type } = res.locals;
+
     const sections = await db.Section.find({ type }).populate("articles", "title description");
 
     res.status(200)
@@ -49,14 +52,14 @@ const getAllEndpoint: RequestHandler = async (req, res) => {
 };
 
 const getByIdEndpoint: RequestHandler = (req, res) => {
-    const { section } = res.locals;
+    const { section } = res.locals as { section: SectionDocument };
 
     res.status(200).json(httpSuccess(section));
 };
 
 const updateEndpoint: RequestHandler = (req, res) => {
     const { title, type } = req.body;
-    const { section } = res.locals;
+    const { section } = res.locals as { section: SectionDocument };
 
     tryHandle(res, async () => {
         await section.updateOne({
@@ -69,10 +72,10 @@ const updateEndpoint: RequestHandler = (req, res) => {
 };
 
 const removeEndpoint: RequestHandler = (req, res) => {
-    const { section } = res.locals;
+    const { section } = res.locals as { section: SectionDocument };
 
     tryHandle(res, async () => {
-        await db.Article.deleteMany({ _id: { $in: section.children }});
+        await db.Article.deleteMany({ _id: { $in: section.articles }});
 
         await section.deleteOne();
 
@@ -82,7 +85,13 @@ const removeEndpoint: RequestHandler = (req, res) => {
 
 const addToEndpoint: RequestHandler = (req, res) => {
     const { title, description, content } = req.body;
-    const { section, loginUser: user } = res.locals;
+    const { 
+        section, 
+        loginUser: user 
+    } = res.locals as {
+        section: SectionDocument,
+        loginUser: UserDocument
+    };
 
     tryHandle(res, async () => {
         const article = await db.Article.create({ 
@@ -93,7 +102,7 @@ const addToEndpoint: RequestHandler = (req, res) => {
             creators: [ user.id ]
         });
         
-        await section.updateOne({ children: [...section.articles, article.id ]});
+        await section.updateOne({ articles: [...section.articles, article.id ]});
 
         res.status(201).json(httpSuccess(article));
     });
