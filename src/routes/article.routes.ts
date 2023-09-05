@@ -1,5 +1,8 @@
 import { Express } from "express";
 import controller from "../controllers/articles.controller";
+import auth from "../middlewares/auth.middlewares";
+import middlewares from "../middlewares/middlewares";
+import articleMiddlewares from "../middlewares/article.middlewares";
 
 export const GET_ARTICLE = "/articles/:id";
 export const UPDATE_ARTICLE = "/articles/:id";
@@ -12,28 +15,62 @@ export const REMOVE_FEEDBACK = "/feedbacks/:id";
 
 const articleRoutes = (app: Express) => {
     app.get(GET_ARTICLE,
-        [], controller.getByIdEndpoint);
+        [
+            middlewares.checkId,
+            articleMiddlewares.getArticle
+        ], controller.getByIdEndpoint);
 
     app.put(UPDATE_ARTICLE,
-        [], controller.updateEndpoint);
+        [
+            auth.authenticate,
+            auth.authorize,
+            middlewares.checkId,
+            articleMiddlewares.getArticle,
+            articleMiddlewares.getBody
+        ], controller.updateEndpoint);
 
     app.delete(REMOVE_ARTICLE,
-        [], controller.removeEndpoint);
+        [
+            auth.authenticate, 
+            auth.authorize,
+            middlewares.checkId,
+            articleMiddlewares.getArticle
+        ], controller.removeEndpoint);
 
     app.post(REACT_TO_ARTICLE,
-        [], controller.reactToEndpoint);
+        [
+            auth.authenticate,
+            middlewares.checkId,
+            articleMiddlewares.getArticle,
+            articleMiddlewares.getReactionType,
+        ], controller.reactToEndpoint);
 
     app.delete(UNREACT_TO_ARTICLE,
-        [], controller.unReactToEndpoint);
+        [
+            auth.authenticate,
+            middlewares.checkId,
+            articleMiddlewares.getArticle
+        ], controller.unReactToEndpoint);
     
     app.get(GET_FEEDBACKS,
-        [], controller.getFeedbacksEndpoint);
+        [
+            auth.authenticate, 
+            auth.authorize
+        ], controller.getFeedbacksEndpoint);
 
     app.post(SEND_FEEDBACK,
-        [], controller.sendFeedbackEndpoint);
+        [
+            auth.authenticate,
+            middlewares.checkId,
+            articleMiddlewares.getArticle
+        ], controller.sendFeedbackEndpoint);
 
     app.delete(REMOVE_FEEDBACK,
-        [], controller.removeFeedbackEndpoint);
+        [
+            auth.authenticate, 
+            auth.authorize,
+            middlewares.checkId
+        ], controller.removeFeedbackEndpoint);
 };
 
 export default articleRoutes;
