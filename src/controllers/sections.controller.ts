@@ -6,6 +6,7 @@ import db from "../models/models";
 import { httpMongoError, httpSuccess } from "../helpers/response.helpers";
 import { UserDocument } from "../models/User.model";
 import { SectionDocument } from "../models/Section.model";
+import ISectionsController from "../interfaces/ISectionsController";
 
 const createEndpoint: RequestHandler = (req, res) => {
     const { loginUser } = res.locals as { loginUser: UserDocument };
@@ -108,7 +109,7 @@ const addToEndpoint: RequestHandler = (req, res) => {
     });
 };
 
-const controller = {
+const controller: ISectionsController = {
     createEndpoint,
     getAllEndpoint,
     getByIdEndpoint,

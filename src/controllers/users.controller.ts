@@ -7,6 +7,7 @@ import db from "../models/models";
 import { tryHandle } from "../helpers/controller.helpers";
 import { UserDocument } from "../models/User.model";
 import { ArticleDocument } from "../models/Article.model";
+import IUsersController from "../interfaces/IUsersController";
 
 const loginEndpoint: RequestHandler = (req, res) => {
     const { user } = res.locals as { user: UserDocument };
@@ -163,7 +164,7 @@ const removeFromCollectionEndpoint: RequestHandler = async (req, res) => {
     });
 };
 
-const controller = {
+const controller: IUsersController = {
     loginEndpoint,
     registerEndpoint,
     getEndpoint,

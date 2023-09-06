@@ -1,0 +1,15 @@
+{
+  "name": "Documentation API",
+  "version": "1.0.0",
+  "description": "Documentation App",
+  "title": "Documentation API",
+  "sampleUrl": "www.example.com",
+  "url": "www.example.com",
+  "order": [
+    "Users",
+    "Sections",
+    "Articles",
+    "Collections",
+    "Feedbacks"
+  ]
+}

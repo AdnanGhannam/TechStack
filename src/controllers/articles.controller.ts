@@ -5,6 +5,7 @@ import db from "../models/models";
 import { ArticleDocument } from "../models/Article.model";
 import { UserDocument } from "../models/User.model";
 import { ReactionDocument } from "../models/Reaction.model";
+import IArticlesController from "../interfaces/IArticlesController";
 
 const getByIdEndpoint: RequestHandler = (req, res) => {
     const { article } = res.locals as { article: ArticleDocument };
@@ -152,7 +153,7 @@ const removeFeedbackEndpoint: RequestHandler = async (req, res) => {
     res.status(204).end();
 };
 
-const controller = {
+const controller: IArticlesController = {
     getByIdEndpoint,
     updateEndpoint,
     removeEndpoint,
