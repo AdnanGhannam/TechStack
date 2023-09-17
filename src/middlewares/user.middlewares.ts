@@ -1,14 +1,15 @@
 import { RequestHandler } from "express";
 import { httpError } from "../helpers/response.helpers";
 import db from "../models/models";
-import { LOGIN, REGISTER, UPDATE_USER } from "../routes/user.routes";
+import { CHANGE_PASSWORD, LOGIN, REGISTER, UPDATE_USER } from "../routes/user.routes";
 import { createHash } from "crypto";
+import UserModel from "../models/User.model";
 
 /**
- * @passes Name, Email, Password
+ * @passes Name, Email, Password, NewPassword
  */
 const getBody: RequestHandler = (req, res, next) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, newPassword } = req.body;
 
     switch(req.route.path) {
         case LOGIN:
@@ -25,6 +26,13 @@ const getBody: RequestHandler = (req, res, next) => {
                 return;
             }
             break;
+        case CHANGE_PASSWORD:
+            if (!password && !newPassword) {
+                res.status(400)
+                    .json(httpError("The 'password' and 'newPassword' fields are required"));
+                return;
+            }
+            break;
         default:
             if (!name && !email) {
                 res.status(400)
@@ -38,7 +46,8 @@ const getBody: RequestHandler = (req, res, next) => {
         ...res.locals,
         name,
         email,
-        password
+        password,
+        newPassword
     };
 
     next();
@@ -101,29 +110,15 @@ const checkPassword: RequestHandler = (req, res, next) => {
  * @passes PasswordHash
  */
 const cryptPassword: RequestHandler = (req, res, next) => {
-    const { password } = res.locals;
+    const { password, newPassword } = res.locals;
 
-    const constraints: RegExp[] = [/[A-Z]/g, /[a-z]/g, /[0-9]/g, /[^A-Za-z0-9]/g];
-    let matches = true;
-    constraints.forEach(constraint => {
-        matches = matches && password.match(constraint)?.length >= 1;
-    });
-    
-    if (!matches) {
-        res.status(400).json(httpError("Password should contain at least: " +
-                                        "1 uppercase letters, " +
-                                        "1 lowercase letters, " +
-                                        "1 numbers, " +
-                                        "1 special characters."));
-        return;
+    const errorMessage = UserModel.validatePassword(newPassword ?? password);
+
+    if (errorMessage) {
+        return res.status(400).json(errorMessage);
     }
 
-    if (password.length < 10) {
-        res.status(400).json(httpError("Password is too short (min length is 10)"));
-        return;
-    }
-
-    res.locals.password = createHash('sha256').update(password).digest('hex');
+    res.locals.password = createHash('sha256').update(newPassword ?? password).digest('hex');
     next();
 };
 

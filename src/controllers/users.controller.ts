@@ -37,6 +37,12 @@ const registerEndpoint: RequestHandler = (req, res) => {
     });
 };
 
+const getAllEndpoint: RequestHandler = async (req, res) => {
+    const users = await db.User.find();
+
+    res.json(httpSuccess(users));
+};
+
 const getEndpoint: RequestHandler = (req, res) => {
     const { loginUser } = res.locals as { loginUser: UserDocument };
 
@@ -54,13 +60,23 @@ const updateEndpoint: RequestHandler = (req, res) => {
     const { loginUser: user } = res.locals as { loginUser: UserDocument };
 
     tryHandle(res, async () => {
-        db.User.updateOne()
         await user.updateOne({
             name: name || user.name,
             email: email || user.email,
         }, { runValidators: true });
 
         res.status(204).json();
+    });
+};
+
+const changePasswordEndpoint: RequestHandler = async (req, res) => {
+    const { password } = res.locals;
+    const { loginUser: user } = res.locals as { loginUser: UserDocument };
+
+    tryHandle(res, async () => {
+        await user.updateOne({ password });
+
+        res.status(204).end();
     });
 };
 
@@ -82,7 +98,6 @@ const updateByIdEndpoint: RequestHandler = (req, res) => {
     const { user } = res.locals as { user: UserDocument };
 
     tryHandle(res, async () => {
-        db.User.updateOne()
         await user.updateOne({
             name: name || user.name,
             email: email || user.email,
@@ -167,9 +182,11 @@ const removeFromCollectionEndpoint: RequestHandler = async (req, res) => {
 const controller: IUsersController = {
     loginEndpoint,
     registerEndpoint,
+    getAllEndpoint,
     getEndpoint,
     getByIdEndpoint,
     updateEndpoint,
+    changePasswordEndpoint,
     removeEndpoint,
     updateByIdEndpoint,
     removeByIdEndpoint,

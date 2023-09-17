@@ -7,8 +7,10 @@ import middlewares from "../middlewares/middlewares";
 
 export const LOGIN = "/login";
 export const REGISTER = "/register";
+export const GET_USERS = "/users";
 export const GET_USER = "/user";
 export const UPDATE_USER = "/user";
+export const CHANGE_PASSWORD = "/user/change-password";
 export const REMOVE_USER = "/user";
 export const GET_USER_BY_ID = "/users/:id";
 export const UPDATE_USER_BY_ID = "/users/:id";
@@ -31,6 +33,12 @@ const userRoutes = (app: Express) => {
             userMiddlewares.cryptPassword
         ], controller.registerEndpoint);
 
+    app.get(GET_USERS,
+        [
+            auth.authenticate,
+            auth.authorize,
+        ], controller.getAllEndpoint);
+
     app.get(GET_USER,
         [
             auth.authenticate
@@ -42,6 +50,14 @@ const userRoutes = (app: Express) => {
             userMiddlewares.getBody
         ], controller.updateEndpoint);
         
+    app.put(CHANGE_PASSWORD,
+        [
+            auth.authenticate,
+            userMiddlewares.getBody,
+            userMiddlewares.checkPassword,
+            userMiddlewares.cryptPassword
+        ], controller.changePasswordEndpoint);
+
     app.delete(REMOVE_USER,
         [
             auth.authenticate,

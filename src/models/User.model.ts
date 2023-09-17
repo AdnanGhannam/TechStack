@@ -54,4 +54,34 @@ export default class UserModel {
 
         return model(USER_MODEL, schema);
     }
+
+    /**
+     * 
+     * @param password
+     * @returns Null if valid or error message if not
+     */
+    static validatePassword(password: string) {
+        const constraints: RegExp[] = [/[A-Z]/g, /[a-z]/g, /[0-9]/g, /[^A-Za-z0-9]/g];
+
+        let matches = true;
+
+        constraints.forEach(constraint => {
+            // TODO test this
+            matches = matches && (password.match(constraint)?.length ?? 0) >= 1;
+        });
+        
+        if (!matches) {
+            return "Password should contain at least: " +
+                                            "1 uppercase letters, " +
+                                            "1 lowercase letters, " +
+                                            "1 numbers, " +
+                                            "1 special characters.";
+        }
+
+        if (password.length < 10) {
+            return "Password is too short (min length is 10)";
+        }
+
+        return null;
+    }
 }

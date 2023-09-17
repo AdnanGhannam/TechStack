@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
 import env from "../config/env.config";
-import UserModel from "./User.model";
+import UserModel, { TUser } from "./User.model";
 import ArticleModel from "./Article.model";
 import SectionModel from "./Section.model";
 import CollectionModel from "./Collection.model";
 import ReactionModel from "./Reaction.model";
 import FeedbackModel from "./Feedback.model";
+import users from "../data/users.json";
+import sections from "../data/sections.json";
+import articles from "../data/articles.json";
 
 const init = () => {
     const { DB_HOST: HOST, DB_PORT: PORT, DB_NAME: NAME } = env;

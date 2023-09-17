@@ -82,6 +82,7 @@ export default interface IUsersController {
      */
     registerEndpoint: RequestHandler,
 
+    getAllEndpoint: RequestHandler,
     getEndpoint: RequestHandler,
 
     /**
@@ -150,6 +151,8 @@ export default interface IUsersController {
      *   }
      */
     updateEndpoint: RequestHandler,
+
+    changePasswordEndpoint: RequestHandler;
 
     /**
      * @apiVersion 1.0.0
