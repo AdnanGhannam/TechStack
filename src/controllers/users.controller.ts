@@ -65,7 +65,7 @@ const updateEndpoint: RequestHandler = (req, res) => {
             email: email || user.email,
         }, { runValidators: true });
 
-        res.status(204).json();
+        res.status(204).end();
     });
 };
 
@@ -89,7 +89,7 @@ const removeEndpoint: RequestHandler = async (req, res) => {
         await user.deleteOne();
         await collection?.deleteOne();
 
-        res.status(204).json();
+        res.status(204).end();
     });
 };
 
@@ -103,7 +103,7 @@ const updateByIdEndpoint: RequestHandler = (req, res) => {
             email: email || user.email,
         }, { runValidators: true });
 
-        res.status(204).json();
+        res.status(204).end();
     });
 };
 
@@ -116,7 +116,7 @@ const removeByIdEndpoint: RequestHandler = async (req, res) => {
         await user.deleteOne();
         await collection?.deleteOne();
 
-        res.status(204).json();
+        res.status(204).end();
     });
 };
 
@@ -141,16 +141,14 @@ const addToCollectionEndpoint: RequestHandler = async (req, res) => {
 
     // Check if exists
     if (collection.articles.indexOf(article.id) != -1) {
-        res.status(400)
+        return res.status(400)
             .json(httpError("You already have this article in your collection"));
-        return;
     }
 
     // Check for limit
     if (collection.articles.length > 10) {
-        res.status(400)
+        return res.status(400)
             .json(httpError("You've reached you limit"));
-        return;
     }
 
     tryHandle(res, async () => {

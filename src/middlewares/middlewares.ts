@@ -13,9 +13,8 @@ const checkId: RequestHandler = (req, res, next) => {
     const { id } = req.params;
 
     if (!Types.ObjectId.isValid(id)) {
-        res.status(400)
+        return res.status(400)
             .json(httpError(`Id: '${id}' is not valid`));
-        return;
     }
 
     next();

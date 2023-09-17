@@ -13,18 +13,16 @@ const authenticate: RequestHandler = (req, res, next) => {
     const token = req.headers.authorization?.replace("Bearer ", "");
     
     if (!token) {
-        res.status(403)
+        return res.status(403)
             .json(httpError("JWT token is required!"));
-        return;
     }
 
     const { SECRET } = env;
 
     jwt.verify(token, SECRET, async (err, doc: any) => {
         if (err) {
-            res.status(400)
+            return res.status(400)
                 .json(httpError("JWT token is not valid"));
-            return;
         }
         
         const userId = doc?.["id"];
@@ -58,9 +56,8 @@ const authorize: RequestHandler = async (req, res, next) => {
     const { loginUser } = res.locals as { loginUser: UserDocument };
 
     if (loginUser.privilege != "administrator") {
-        res.status(401)
+        return res.status(401)
             .json(httpError("You don't have privilege to make this action"));
-        return;
     }
 
     res.locals.privilege = loginUser.privilege;

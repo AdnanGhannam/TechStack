@@ -96,9 +96,8 @@ const unReactToEndpoint: RequestHandler = (req, res) => {
     });
 
     if (!reactionId) {
-        res.status(404)
+        return res.status(404)
             .json(httpError("You didn't react to this article"));
-        return;
     }
 
     tryHandle(res, async () => {
@@ -125,9 +124,8 @@ const sendFeedbackEndpoint: RequestHandler = (req, res) => {
     }
 
     if (!text) {
-        res.status(400)
+        return res.status(400)
             .json(httpError("The 'text' field is required"));
-        return;
     }
 
     tryHandle(res, async () => {
