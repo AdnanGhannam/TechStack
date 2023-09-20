@@ -3,43 +3,38 @@ import { ArticleDocument } from "../models/Article.model";
 import { tryHandle } from "../helpers/controller.helpers";
 import { Types } from "mongoose";
 import db from "../models/models";
-import { httpMongoError, httpSuccess } from "../helpers/response.helpers";
+import { httpError, httpMongoError, httpSuccess } from "../helpers/response.helpers";
 import { UserDocument } from "../models/User.model";
 import { SectionDocument } from "../models/Section.model";
 import ISectionsController from "../interfaces/ISectionsController";
 
-const createEndpoint: RequestHandler = (req, res) => {
+const createEndpoint: RequestHandler = async (req, res) => {
     const { loginUser } = res.locals as { loginUser: UserDocument };
-    const { title, type, article: { articleTitle, description, content } } = res.locals;
+    const { title, type } = res.locals;
+    const { toolkit: toolkitId } = req.body;
 
-    let newArticle: ArticleDocument | undefined = undefined;
+    if (!Types.ObjectId.isValid(toolkitId)) {
+        return res.status(400)
+            .json(httpError(`Id: '${toolkitId}' is not valid`));
+    }
+
+    const toolkit = await db.Toolkit.findById(toolkitId);
+
+    if (!toolkit) {
+        return res.status(404)
+            .json(httpError(`Toolkit with id: '${toolkitId}' is not found`));
+    }
+
     tryHandle(res, async () =>  {
-        const articleId = new Types.ObjectId();
-
-        const newSection = await db.Section.create({
+        const section = await db.Section.create({
+            toolkit: toolkitId,
             title, 
             type, 
-            creator: 
-            loginUser.id, 
-            articles: [articleId] 
-        });
-
-        newArticle = await db.Article.create({
-            _id: articleId, 
-            title: articleTitle, 
-            type, 
-            description, 
-            content, 
-            section: newSection.id,
-            creators: [loginUser.id]
+            creator: loginUser.id
         });
 
         res.status(201)
-            .json(httpSuccess(newSection));
-    }, async (err) => {
-        await newArticle?.deleteOne();
-
-        res.status(400).json(httpMongoError(err));
+            .json(httpSuccess(section));
     });
 };
 
@@ -100,7 +95,9 @@ const addToEndpoint: RequestHandler = (req, res) => {
             type: section.type, 
             description, 
             content,
-            creators: [ user.id ]
+            creators: [ user.id ],
+            section: section.id,
+            toolkit: section.toolkit
         });
         
         await section.updateOne({ articles: [...section.articles, article.id ]});

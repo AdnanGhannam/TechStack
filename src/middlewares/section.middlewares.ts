@@ -17,17 +17,19 @@ const getSection: RequestHandler = async (req, res, next) => {
 };
 
 const getBody: RequestHandler = (req, res, next) => {
-    const { title, type, article: { title: articleTitle = "", description = "", content = "" } = {} } 
-        = req.body;
+    const { title, type } = req.body;
     
-    if (!title || !type || !articleTitle || !description || !content) {
+    if (!title || !type) {
         return res.status(400)
-            .json(httpError(`The following fields are required: 'title', 'type', 'article.title', 'article.description' and 'article.content'`));
+            .json(httpError(`The 'title' and 'type' fields are required`));
     }
 
-    res.locals.title = title;
-    res.locals.type = type;
-    res.locals.article = { articleTitle, description, content };
+    res.locals = {
+        ...res.locals,
+        title,
+        type
+    };
+
     next();
 };
 
