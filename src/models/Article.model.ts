@@ -3,6 +3,7 @@ import { USER_MODEL } from "./User.model";
 import { SECTION_MODEL, SECTION_TYPES } from "./Section.model";
 import { REACTION_MODEL } from "./Reaction.model";
 import { FEEDBACK_MODEL } from "./Feedback.model";
+import { TOOLKIT_MODEL } from "./Toolkit.model";
 
 export const ARTICLE_MODEL = "Article";
 export type TArticle = InferSchemaType<typeof ArticleModel.schema>;
@@ -45,6 +46,10 @@ export default class ArticleModel {
             lastUpdateFrom: {
                 type: Types.ObjectId,
                 ref: USER_MODEL
+            },
+            toolkit: {
+                type: Types.ObjectId,
+                ref: TOOLKIT_MODEL
             },
             section: {
                 type: Types.ObjectId,
