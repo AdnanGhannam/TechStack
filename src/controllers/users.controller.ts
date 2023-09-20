@@ -13,9 +13,11 @@ const loginEndpoint: RequestHandler = (req, res) => {
     const { user } = res.locals as { user: UserDocument };
     const { SECRET } = env;
 
-    const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: "3h"});
+    const expiresIn = 10800 // 3h;
 
-    res.status(200).json(httpSuccess({ token, privilege: user.privilege }));
+    const token = jwt.sign({ id: user.id }, SECRET, { expiresIn });
+
+    res.status(200).json(httpSuccess({ token, privilege: user.privilege, expiresIn }));
 };
 
 const registerEndpoint: RequestHandler = (req, res) => {

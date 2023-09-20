@@ -108,7 +108,7 @@ const cryptPassword: RequestHandler = (req, res, next) => {
     const errorMessage = UserModel.validatePassword(newPassword ?? password);
 
     if (errorMessage) {
-        return res.status(400).json(errorMessage);
+        return res.status(400).json(httpError(errorMessage));
     }
 
     res.locals.password = createHash('sha256').update(newPassword ?? password).digest('hex');
