@@ -30,7 +30,7 @@ const getAllEndpoint: RequestHandler = async (req, res) => {
     res.json(httpSuccess(toolkits));
 };
 
-const getByIdEndpoint: RequestHandler = (req, res) => {
+const getByIdEndpoint: RequestHandler = async (req, res) => {
     const { toolkit } = res.locals;
 
     res.json(httpSuccess(toolkit));

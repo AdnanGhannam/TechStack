@@ -4,11 +4,11 @@ import auth from "../middlewares/auth.middlewares";
 import middlewares from "../middlewares/middlewares";
 import toolkitMiddlewares from "../middlewares/toolkit.middlewares";
 
-export const CREATE_TOOLKIT = "toolkits";
-export const GET_ALL_TOOLKITS = "toolkits";
-export const GET_TOOLKIT_BY_ID = "toolkits/:id";
-export const UPDATE_TOOLKIT = "toolkits/:id";
-export const REMOVE_TOOLKIT = "toolkits/:id";
+export const CREATE_TOOLKIT = "/toolkits";
+export const GET_ALL_TOOLKITS = "/toolkits";
+export const GET_TOOLKIT_BY_ID = "/toolkits/:id";
+export const UPDATE_TOOLKIT = "/toolkits/:id";
+export const REMOVE_TOOLKIT = "/toolkits/:id";
 
 const toolkitRoutes = (app: Express) => {
     app.post(CREATE_TOOLKIT, 

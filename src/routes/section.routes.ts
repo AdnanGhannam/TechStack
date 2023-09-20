@@ -6,7 +6,7 @@ import auth from "../middlewares/auth.middlewares";
 import middlewares from "../middlewares/middlewares";
 
 export const CREATE_SECTION = "/sections"
-export const GET_ALL_SECTIONS = "/sections";
+export const GET_ALL_SECTIONS = "/sections/:id"; // Toolkit Id
 export const GET_SECTION = "/sections/:id";
 export const UPDATE_SECTION = "/sections/:id";
 export const REMOVE_SECTION = "/sections/:id";
@@ -22,7 +22,9 @@ const sectionRoutes = (app: Express) => {
 
     app.get(GET_ALL_SECTIONS,
         [
-            sectionMiddlewares.checkSectionType
+            sectionMiddlewares.checkSectionType,
+            middlewares.checkId,
+            toolkitMiddlewares.getToolkit
         ], controller.getAllEndpoint);
 
     app.get(GET_SECTION,

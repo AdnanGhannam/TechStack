@@ -6,9 +6,9 @@ import SectionModel from "./Section.model";
 import CollectionModel from "./Collection.model";
 import ReactionModel from "./Reaction.model";
 import FeedbackModel from "./Feedback.model";
-import users from "../data/users.json";
-import sections from "../data/sections.json";
-import articles from "../data/articles.json";
+// import users from "../data/users.json";
+// import sections from "../data/sections.json";
+// import articles from "../data/articles.json";
 import ToolkitModel from "./Toolkit.model";
 
 const init = () => {

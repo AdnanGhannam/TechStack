@@ -27,7 +27,7 @@ export default class ArticleModel {
             description: {
                 type: String,
                 required: true,
-                maxlength: 60
+                maxlength: 300
             },
             content: {
                 type: String,

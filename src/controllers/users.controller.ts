@@ -17,7 +17,7 @@ const loginEndpoint: RequestHandler = (req, res) => {
 
     const token = jwt.sign({ id: user.id }, SECRET, { expiresIn });
 
-    res.status(200).json(httpSuccess({ token, privilege: user.privilege, expiresIn }));
+    res.status(200).json(httpSuccess({ token, privilege: user.privilege, expiresIn, id: user.id }));
 };
 
 const registerEndpoint: RequestHandler = (req, res) => {

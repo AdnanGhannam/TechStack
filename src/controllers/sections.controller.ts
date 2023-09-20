@@ -33,15 +33,19 @@ const createEndpoint: RequestHandler = async (req, res) => {
             creator: loginUser.id
         });
 
+        await toolkit.updateOne({ sections: [...toolkit.sections, section.id ]});
+
         res.status(201)
             .json(httpSuccess(section));
     });
 };
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
+    const { id: toolkitId } = req.params;
     const { type } = res.locals;
 
-    const sections = await db.Section.find({ type }).populate("articles", "title description");
+    const sections = await db.Section.find({ type, toolkit: toolkitId })
+                                    .populate("articles", "title description");
 
     res.status(200)
         .json(httpSuccess(sections));
