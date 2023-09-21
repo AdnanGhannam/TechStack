@@ -7,8 +7,10 @@ import { UserDocument } from "../models/User.model";
 import { ReactionDocument } from "../models/Reaction.model";
 import IArticlesController from "../interfaces/IArticlesController";
 
-const getByIdEndpoint: RequestHandler = (req, res) => {
+const getByIdEndpoint: RequestHandler = async (req, res) => {
     const { article } = res.locals as { article: ArticleDocument };
+
+    await article.updateOne({ $inc: { views: 1 }});
 
     res.status(200)
         .json(httpSuccess(article));

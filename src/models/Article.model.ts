@@ -47,6 +47,10 @@ export default class ArticleModel {
                 type: Types.ObjectId,
                 ref: USER_MODEL
             },
+            views: {
+                type: Number,
+                default: 0
+            },
             toolkit: {
                 type: Types.ObjectId,
                 ref: TOOLKIT_MODEL
