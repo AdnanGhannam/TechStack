@@ -17,7 +17,8 @@ const sectionRoutes = (app: Express) => {
         [
             auth.authenticate, 
             auth.authorize,
-            sectionMiddlewares.getBody
+            sectionMiddlewares.getBody,
+            sectionMiddlewares.checkSectionType
         ], controller.createEndpoint);
 
     app.get(GET_ALL_SECTIONS,

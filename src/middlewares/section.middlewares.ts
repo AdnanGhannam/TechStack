@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import db from "../models/models";
 import { httpError } from "../helpers/response.helpers";
+import { SECTION_TYPES } from "../models/Section.model";
 
 const getSection: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
@@ -36,7 +37,7 @@ const getBody: RequestHandler = (req, res, next) => {
 const checkSectionType: RequestHandler = (req, res, next) => {
     const { type } = req.query;
 
-    if (!type || (type != "reference" && type != "tutorial")) {
+    if (!type || !SECTION_TYPES.includes(`${type}`)) {
         return res.status(400)
             .json(httpError("The 'type' query parameter should be either 'reference' or 'tutorial'"));
     }
