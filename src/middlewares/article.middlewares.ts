@@ -4,7 +4,7 @@ import { httpError } from "../helpers/response.helpers";
 
 const getArticle: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
-    const article = await db.Article.findById(id).populate("reactions");
+    const article = await db.Article.findById(id).populate("reactions creators");
 
     if (!article) {
         return res.status(404)

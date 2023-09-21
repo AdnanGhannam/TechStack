@@ -131,7 +131,14 @@ const removeByIdEndpoint: RequestHandler = async (req, res) => {
 const getCollectionEndpoint: RequestHandler = async (req, res) => {
     const { loginUser } = res.locals as { loginUser: UserDocument };
 
-    const collection = await db.Collection.findById(loginUser.userCollection).populate("articles");
+    const collection = await db.Collection.findById(loginUser.userCollection)
+        .populate({
+            path: 'articles',
+            populate: [
+            { path: 'toolkit' },
+            { path: 'section' }
+            ]
+        });
 
     res.status(200).json(httpSuccess(collection));
 };
