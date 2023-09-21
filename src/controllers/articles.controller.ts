@@ -72,7 +72,7 @@ const reactToEndpoint: RequestHandler = (req, res) => {
                 user: loginUser.id, 
                 article: article.id
             });
-            await article.updateOne({ reactions: [...article.reactions, newReaction] });
+            await article.updateOne({ $addToSet: { reactions: newReaction.id }});
         }
 
         res.status(204).end();
@@ -135,7 +135,7 @@ const sendFeedbackEndpoint: RequestHandler = (req, res) => {
             text
         });
 
-        await article.updateOne({ feedbacks: [...article.feedbacks, feedback.id]});
+        await article.updateOne({ $addToSet: { feedbacks: feedback.id }});
 
         res.status(201)
             .json(httpSuccess(feedback));

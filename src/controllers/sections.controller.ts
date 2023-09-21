@@ -33,7 +33,7 @@ const createEndpoint: RequestHandler = async (req, res) => {
             creator: loginUser.id
         });
 
-        await toolkit.updateOne({ sections: [...toolkit.sections, section.id ]});
+        await toolkit.updateOne({ $addToSet: { sections: section.id } });
 
         res.status(201)
             .json(httpSuccess(section));
@@ -104,7 +104,7 @@ const addToEndpoint: RequestHandler = (req, res) => {
             toolkit: section.toolkit
         });
         
-        await section.updateOne({ articles: [...section.articles, article.id ]});
+        await section.updateOne({ $addToSet: { articles: article.id } });
 
         res.status(201).json(httpSuccess(article));
     });
