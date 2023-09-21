@@ -8,10 +8,16 @@ import { tryHandle } from "../helpers/controller.helpers";
 import { UserDocument } from "../models/User.model";
 import { ArticleDocument } from "../models/Article.model";
 import IUsersController from "../interfaces/IUsersController";
+import { ADMINS_LOGIN } from "../routes/user.routes";
 
 const loginEndpoint: RequestHandler = (req, res) => {
     const { user } = res.locals as { user: UserDocument };
     const { SECRET } = env;
+
+    if (req.route.path == ADMINS_LOGIN && user.privilege != "administrator") {
+        return res.status(401)
+            .json(httpError("Only admins can login here"));
+    }
 
     const expiresIn = 10800 // 3h;
 

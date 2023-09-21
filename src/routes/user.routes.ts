@@ -6,6 +6,7 @@ import auth from "../middlewares/auth.middlewares";
 import middlewares from "../middlewares/middlewares";
 
 export const LOGIN = "/login";
+export const ADMINS_LOGIN = "/admins/login";
 export const REGISTER = "/register";
 export const GET_USERS = "/users";
 export const GET_USER = "/user";
@@ -20,6 +21,13 @@ export const ADD_TO_COLLECTION = "/collection/:id";
 export const REMOVE_FROM_COLLECTION = "/collection/:id";
 
 const userRoutes = (app: Express) => {
+    app.post(ADMINS_LOGIN,
+        [
+            userMiddlewares.getBody,
+            userMiddlewares.getUserByName,
+            userMiddlewares.checkPassword
+        ], controller.loginEndpoint);
+
     app.post(LOGIN,
         [
             userMiddlewares.getBody,
