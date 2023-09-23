@@ -11,6 +11,7 @@ export const GET_TOOLKIT_BY_ID = "/toolkits/:id";
 export const UPDATE_TOOLKIT = "/toolkits/:id";
 export const REMOVE_TOOLKIT = "/toolkits/:id";
 export const ADD_TO_TOOLKIT = "/toolkits/section/:id";
+export const GET_ALL_SECTIONS_BY_TOOLKIT = "/toolkits/section/:id"
 
 const toolkitRoutes = (app: Express) => {
     app.post(CREATE_TOOLKIT, 
@@ -57,6 +58,12 @@ const toolkitRoutes = (app: Express) => {
             sectionMiddlewares.checkSectionType
         ], controller.addToEndpoint);
 
+    app.get(GET_ALL_SECTIONS_BY_TOOLKIT,
+        [
+            sectionMiddlewares.checkSectionType,
+            middlewares.checkId,
+            toolkitMiddlewares.getToolkit
+        ], controller.getAllSectionsInEndpoint);
 };
 
 export default toolkitRoutes;

@@ -20,12 +20,12 @@ const getBody = (requires: Requires) => {
     const exec: RequestHandler = (req, res, next) => {
         const { title, description, content, order } = req.body;
 
-        if (requires == Requires.All && (!title || !description || !content || !order)) {
+        if (requires == Requires.All && (!title || !description || !content || order == null)) {
             return res.status(400)
                 .json(httpError("The 'title', 'description', 'content' and 'order' fields are required"));
         }
 
-        if (requires == Requires.Partial && !title && !description && !content && !order) {
+        if (requires == Requires.Partial && !title && !description && !content && order == null) {
             return res.status(400)
                 .json(httpError(`One of the following fields is required: 'title', 'description', 'content' and 'order'`));
         }

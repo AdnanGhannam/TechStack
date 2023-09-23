@@ -7,14 +7,7 @@ import { SectionDocument } from "../models/Section.model";
 import ISectionsController from "../interfaces/ISectionsController";
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
-    const { id: toolkitId } = req.params;
-    const { type } = res.locals;
-
-    const sections = await db.Section.find({ type, toolkit: toolkitId })
-                                    .populate("articles", "title description");
-
-    res.status(200)
-        .json(httpSuccess(sections));
+    
 };
 
 const getByIdEndpoint: RequestHandler = (req, res) => {
@@ -71,9 +64,9 @@ const addToEndpoint: RequestHandler = (req, res) => {
         });
         
         await section.updateOne({ 
-            $addToSet: {
-                sections: {
-                    $each: [article.id],
+            $push: {
+                articles: {
+                    $each: [article],
                     $position: order
                 }
             }

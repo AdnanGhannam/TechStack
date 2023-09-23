@@ -12,4 +12,6 @@ export default interface IToolkitsController {
     removeEndpoint: RequestHandler;
 
     addToEndpoint: RequestHandler;
+
+    getAllSectionsInEndpoint: RequestHandler;
 };

@@ -75,9 +75,9 @@ const addToEndpoint: RequestHandler = (req, res) => {
         });
 
         await toolkit.updateOne( {
-            $addToSet: {
+            $push: {
                 sections: {
-                    $each: [section.id],
+                    $each: [section],
                     $position: order
                 }
             }
@@ -88,13 +88,25 @@ const addToEndpoint: RequestHandler = (req, res) => {
     });
 };
 
+const getAllSectionsInEndpoint: RequestHandler = async (req, res) => {
+    const { id: toolkitId } = req.params;
+    const { type } = res.locals;
+
+    const sections = await db.Section.find({ type, toolkit: toolkitId })
+                                    .populate("articles", "title description");
+
+    res.status(200)
+        .json(httpSuccess(sections));
+};
+
 const controller: IToolkitsController = {
     createEndpoint,
     getAllEndpoint,
     getByIdEndpoint,
     updateEndpoint,
     removeEndpoint,
-    addToEndpoint
+    addToEndpoint,
+    getAllSectionsInEndpoint
 };
 
 export default controller;

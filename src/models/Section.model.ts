@@ -13,9 +13,8 @@ export default class SectionModel {
         return new Schema({
             title: {
                 type: String,
-                unique: true,
                 minlength: 5,
-                maxlength: 40,
+                maxlength: 80,
                 required: true
             },
             type: {

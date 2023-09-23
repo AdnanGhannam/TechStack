@@ -47,14 +47,15 @@ const getBody = (requires: Requires) => {
 
 
 const checkSectionType: RequestHandler = (req, res, next) => {
-    const { type } = req.query;
+    const type = res.locals.type || req.query.type;
 
     if (!type || !SECTION_TYPES.includes(`${type}`)) {
         return res.status(400)
-            .json(httpError("The 'type' query parameter should be either 'reference' or 'tutorial'"));
+            .json(httpError("The 'type' should be either 'reference' or 'tutorial'"));
     }
 
     res.locals.type = type;
+
     next();
 };
 

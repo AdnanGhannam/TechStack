@@ -15,9 +15,8 @@ export default class ArticleModel {
             title: {
                 type: String,
                 required: true,
-                unique: true,
                 minlength: 5,
-                maxlength: 40
+                maxlength: 80
             },
             type: {
                 type: String,

@@ -15,7 +15,6 @@ export const httpError = (...messages: string[]) => {
 }
 
 export const httpMongoError = (err: any) => {
-    console.log(err)
     if (!err.errors) {
         if (err.code == 11000) {
             const key = Object.keys(err.keyValue).at(0);
