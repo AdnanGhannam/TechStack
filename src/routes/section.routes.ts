@@ -3,7 +3,7 @@ import controller from "../controllers/sections.controller";
 import sectionMiddlewares from "../middlewares/section.middlewares";
 import toolkitMiddlewares from "../middlewares/toolkit.middlewares";
 import auth from "../middlewares/auth.middlewares";
-import middlewares from "../middlewares/middlewares";
+import middlewares, { Requires } from "../middlewares/middlewares";
 
 export const GET_ALL_SECTIONS = "/sections/:id"; // Toolkit Id
 export const GET_SECTION = "/sections/:id";
@@ -30,6 +30,7 @@ const sectionRoutes = (app: Express) => {
             auth.authenticate, 
             auth.authorize,
             middlewares.checkId,
+            sectionMiddlewares.getBody(Requires.Partial).exec,
             sectionMiddlewares.getSection
         ], controller.updateEndpoint);
 

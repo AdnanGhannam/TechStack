@@ -1,7 +1,7 @@
 import { Express } from "express";
 import controller from "../controllers/toolkits.controller";
 import auth from "../middlewares/auth.middlewares";
-import middlewares from "../middlewares/middlewares";
+import middlewares, { Requires } from "../middlewares/middlewares";
 import toolkitMiddlewares from "../middlewares/toolkit.middlewares";
 import sectionMiddlewares from "../middlewares/section.middlewares";
 
@@ -53,7 +53,7 @@ const toolkitRoutes = (app: Express) => {
             auth.authorize,
             middlewares.checkId,
             toolkitMiddlewares.getToolkit,
-            sectionMiddlewares.getBody,
+            sectionMiddlewares.getBody(Requires.All).exec,
             sectionMiddlewares.checkSectionType
         ], controller.addToEndpoint);
 

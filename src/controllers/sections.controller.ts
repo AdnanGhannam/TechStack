@@ -24,7 +24,7 @@ const getByIdEndpoint: RequestHandler = (req, res) => {
 };
 
 const updateEndpoint: RequestHandler = (req, res) => {
-    const { title, type } = req.body;
+    const { title, type } = res.locals;
     const { section } = res.locals as { section: SectionDocument };
 
     tryHandle(res, async () => {

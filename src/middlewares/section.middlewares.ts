@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import db from "../models/models";
 import { httpError } from "../helpers/response.helpers";
 import { SECTION_TYPES } from "../models/Section.model";
+import { Requires } from "./middlewares";
 
 const getSection: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
@@ -17,23 +18,33 @@ const getSection: RequestHandler = async (req, res, next) => {
     next();
 };
 
-const getBody: RequestHandler = (req, res, next) => {
-    const { title, type, order } = req.body;
-    
-    if (!title || !type || !order) {
-        return res.status(400)
-            .json(httpError(`The 'title', 'type' and 'order' fields are required`));
+const getBody = (requires: Requires) => {
+    const exec: RequestHandler = (req, res, next) => {
+        const { title, type, order } = req.body;
+
+        if (requires == Requires.All && !title && !type && !order) {
+            return res.status(400)
+                .json(httpError("The 'title', 'type' and 'order' fields are required"));
+        }
+
+        if (requires == Requires.Partial && (!title || !type || !order)) {
+            return res.status(400)
+                .json(httpError(`One of the following fields is required: 'title', 'type' and 'order'`));
+        }
+
+        res.locals = {
+            ...res.locals,
+            title,
+            type,
+            order
+        };
+
+        next();
     }
 
-    res.locals = {
-        ...res.locals,
-        title,
-        type,
-        order
-    };
+    return { exec };
+}
 
-    next();
-};
 
 const checkSectionType: RequestHandler = (req, res, next) => {
     const { type } = req.query;

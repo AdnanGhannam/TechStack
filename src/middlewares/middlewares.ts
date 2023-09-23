@@ -3,6 +3,11 @@ import express, { Express, RequestHandler } from "express";
 import { Types } from "mongoose";
 import { httpError } from "../helpers/response.helpers";
 
+export enum Requires {
+    All,
+    Partial
+};
+
 const config = (app: Express) => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
