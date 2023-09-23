@@ -2,34 +2,34 @@ import { RequestHandler } from "express";
 import db from "../models/models";
 import { httpError } from "../helpers/response.helpers";
 import { CREATE_TOOLKIT } from "../routes/toolkit.routes";
+import { Requires } from "./middlewares";
 
-const getBody: RequestHandler = (req, res, next) => {
-    const { name, description, type, company } = req.body;
+const getBody = (requires: Requires) => {
+    const exec: RequestHandler = (req, res, next) => {
+        const { name, description, type, company } = req.body;
 
-    switch(req.route.path) {
-        case CREATE_TOOLKIT:
-            if (!name || !description || !type || ! company) {
-                return res.status(400)
-                    .json(httpError("The 'name', 'description', 'type' and 'company' fields are required"));
-            }
-            break;
-        default:
-            if (!name && !description && !type && ! company) {
-                return res.status(400)
-                    .json(httpError("One of the following fields is required: 'name', 'description', 'type' and 'company'"));
-            }
-            break;
+        if (requires == Requires.All && !name && !description && !type && !company) {
+            return res.status(400)
+                .json(httpError("The 'name', 'description', 'type' and 'company' fields are required"));
+        }
+
+        if (requires == Requires.Partial && (!name || !description || !type || !company)) {
+            return res.status(400)
+                .json(httpError("One of the following fields is required: 'name', 'description', 'type' and 'company'"));
+        }
+
+        res.locals = {
+            ...res.locals,
+            name,
+            description,
+            type,
+            company
+        }
+
+        next();
     }
 
-    res.locals = {
-        ...res.locals,
-        name,
-        description,
-        type,
-        company
-    }
-
-    next();
+    return { exec };
 }
 
 const getToolkit: RequestHandler = async (req, res, next) => {

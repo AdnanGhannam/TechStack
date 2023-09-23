@@ -17,7 +17,7 @@ const toolkitRoutes = (app: Express) => {
         [
             auth.authenticate, 
             auth.authorize,
-            toolkitMiddlewares.getBody
+            toolkitMiddlewares.getBody(Requires.All).exec,
         ], controller.createEndpoint);
 
     app.get(GET_ALL_TOOLKITS, 
@@ -35,7 +35,7 @@ const toolkitRoutes = (app: Express) => {
             auth.authenticate, 
             auth.authorize,
             middlewares.checkId,
-            toolkitMiddlewares.getBody,
+            toolkitMiddlewares.getBody(Requires.Partial).exec,
             toolkitMiddlewares.getToolkit
         ], controller.updateEndpoint);
 
