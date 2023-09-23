@@ -50,7 +50,7 @@ const removeEndpoint: RequestHandler = (req, res) => {
 };
 
 const addToEndpoint: RequestHandler = (req, res) => {
-    const { title, description, content, order } = req.body;
+    const { title, description, content, order } = res.locals;
     const { 
         section, 
         loginUser: user 

@@ -4,6 +4,7 @@ import sectionMiddlewares from "../middlewares/section.middlewares";
 import toolkitMiddlewares from "../middlewares/toolkit.middlewares";
 import auth from "../middlewares/auth.middlewares";
 import middlewares, { Requires } from "../middlewares/middlewares";
+import articleMiddlewares from "../middlewares/article.middlewares";
 
 export const GET_ALL_SECTIONS = "/sections/:id"; // Toolkit Id
 export const GET_SECTION = "/sections/:id";
@@ -47,6 +48,7 @@ const sectionRoutes = (app: Express) => {
             auth.authenticate, 
             auth.authorize,
             middlewares.checkId,
+            articleMiddlewares.getBody(Requires.All).exec,
             sectionMiddlewares.getSection
         ], controller.addToEndpoint);
 };
