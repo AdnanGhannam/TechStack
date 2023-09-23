@@ -49,7 +49,7 @@ export default interface ISectionsController {
      *       ]
      *   }
      */
-    createEndpoint: RequestHandler,
+    // createEndpoint: RequestHandler,
 
     /**
      * @apiVersion 1.0.0

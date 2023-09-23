@@ -3,7 +3,7 @@ import IToolkitsController from "../interfaces/IToolkitsController";
 import db from "../models/models";
 import { httpSuccess } from "../helpers/response.helpers";
 import { tryHandle } from "../helpers/controller.helpers";
-import { ToolkitDocument } from "../models/Toolkit.model";
+import ToolkitModel, { ToolkitDocument } from "../models/Toolkit.model";
 import { UserDocument } from "../models/User.model";
 
 const createEndpoint: RequestHandler = (req, res) => {
@@ -62,12 +62,32 @@ const removeEndpoint: RequestHandler = (req, res) => {
     });
 };
 
+const addToEndpoint: RequestHandler = (req, res) => {
+    const { loginUser, toolkit } = res.locals as { loginUser: UserDocument, toolkit: ToolkitDocument };
+    const { title, type } = res.locals;
+
+    tryHandle(res, async () =>  {
+        const section = await db.Section.create({
+            toolkit: toolkit.id,
+            title, 
+            type, 
+            creator: loginUser.id
+        });
+
+        await toolkit.updateOne({ $addToSet: { sections: section.id } });
+
+        res.status(201)
+            .json(httpSuccess(section));
+    });
+};
+
 const controller: IToolkitsController = {
     createEndpoint,
     getAllEndpoint,
     getByIdEndpoint,
     updateEndpoint,
     removeEndpoint,
+    addToEndpoint
 };
 
 export default controller;

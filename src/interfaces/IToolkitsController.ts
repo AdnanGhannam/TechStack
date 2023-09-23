@@ -10,4 +10,6 @@ export default interface IToolkitsController {
     updateEndpoint: RequestHandler;
     
     removeEndpoint: RequestHandler;
+
+    addToEndpoint: RequestHandler;
 };

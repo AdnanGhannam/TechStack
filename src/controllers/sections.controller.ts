@@ -1,44 +1,10 @@
 import { RequestHandler } from "express";
-import { ArticleDocument } from "../models/Article.model";
 import { tryHandle } from "../helpers/controller.helpers";
-import { Types } from "mongoose";
 import db from "../models/models";
 import { httpError, httpMongoError, httpSuccess } from "../helpers/response.helpers";
 import { UserDocument } from "../models/User.model";
 import { SectionDocument } from "../models/Section.model";
 import ISectionsController from "../interfaces/ISectionsController";
-
-const createEndpoint: RequestHandler = async (req, res) => {
-    const { loginUser } = res.locals as { loginUser: UserDocument };
-    const { title, type } = res.locals;
-    const { toolkit: toolkitId } = req.body;
-
-    if (!Types.ObjectId.isValid(toolkitId)) {
-        return res.status(400)
-            .json(httpError(`Id: '${toolkitId}' is not valid`));
-    }
-
-    const toolkit = await db.Toolkit.findById(toolkitId);
-
-    if (!toolkit) {
-        return res.status(404)
-            .json(httpError(`Toolkit with id: '${toolkitId}' is not found`));
-    }
-
-    tryHandle(res, async () =>  {
-        const section = await db.Section.create({
-            toolkit: toolkitId,
-            title, 
-            type, 
-            creator: loginUser.id
-        });
-
-        await toolkit.updateOne({ $addToSet: { sections: section.id } });
-
-        res.status(201)
-            .json(httpSuccess(section));
-    });
-};
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
     const { id: toolkitId } = req.params;
@@ -111,7 +77,6 @@ const addToEndpoint: RequestHandler = (req, res) => {
 };
 
 const controller: ISectionsController = {
-    createEndpoint,
     getAllEndpoint,
     getByIdEndpoint,
     updateEndpoint,

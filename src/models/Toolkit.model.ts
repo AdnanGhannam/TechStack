@@ -14,7 +14,8 @@ export default class ToolkitModel {
                 type: String,
                 minlength: 1,
                 maxlength: 30,
-                required: true
+                required: true,
+                unique: true
             },
             description: {
                 type: String,
