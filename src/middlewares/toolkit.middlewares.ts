@@ -8,12 +8,12 @@ const getBody = (requires: Requires) => {
     const exec: RequestHandler = (req, res, next) => {
         const { name, description, type, company } = req.body;
 
-        if (requires == Requires.All && !name && !description && !type && !company) {
+        if (requires == Requires.All && (!name || !description || !type || !company)) {
             return res.status(400)
                 .json(httpError("The 'name', 'description', 'type' and 'company' fields are required"));
         }
 
-        if (requires == Requires.Partial && (!name || !description || !type || !company)) {
+        if (requires == Requires.Partial && !name && !description && !type && !company) {
             return res.status(400)
                 .json(httpError("One of the following fields is required: 'name', 'description', 'type' and 'company'"));
         }
