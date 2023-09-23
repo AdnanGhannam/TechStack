@@ -50,7 +50,7 @@ const removeEndpoint: RequestHandler = (req, res) => {
 };
 
 const addToEndpoint: RequestHandler = (req, res) => {
-    const { title, description, content } = req.body;
+    const { title, description, content, order } = req.body;
     const { 
         section, 
         loginUser: user 
@@ -70,7 +70,14 @@ const addToEndpoint: RequestHandler = (req, res) => {
             toolkit: section.toolkit
         });
         
-        await section.updateOne({ $addToSet: { articles: article.id } });
+        await section.updateOne({ 
+            $addToSet: {
+                sections: {
+                    $each: [article.id],
+                    $position: order
+                }
+            }
+        });
 
         res.status(201).json(httpSuccess(article));
     });

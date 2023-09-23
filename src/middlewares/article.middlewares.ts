@@ -16,18 +16,19 @@ const getArticle: RequestHandler = async (req, res, next) => {
 }
 
 const getBody: RequestHandler = (req, res, next) => {
-    const { title, description, content } = req.body;
+    const { title, description, content, order } = req.body;
 
-    if (!title && !description && !content) {
+    if (!title && !description && !content && !order) {
         return res.status(400)
-            .json(httpError("One of the following fields is required 'title', 'description' and 'content'"));
+            .json(httpError("One of the following fields is required 'title', 'description', 'content' and 'order'"));
     }
 
     res.locals = {
         ...res.locals,
         title,
         description,
-        content
+        content,
+        order
     };
 
     next();

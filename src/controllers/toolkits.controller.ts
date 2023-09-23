@@ -64,17 +64,24 @@ const removeEndpoint: RequestHandler = (req, res) => {
 
 const addToEndpoint: RequestHandler = (req, res) => {
     const { loginUser, toolkit } = res.locals as { loginUser: UserDocument, toolkit: ToolkitDocument };
-    const { title, type } = res.locals;
+    const { title, type, order } = res.locals;
 
     tryHandle(res, async () =>  {
         const section = await db.Section.create({
             toolkit: toolkit.id,
             title, 
             type, 
-            creator: loginUser.id
+            creator: loginUser.id,
         });
 
-        await toolkit.updateOne({ $addToSet: { sections: section.id } });
+        await toolkit.updateOne( {
+            $addToSet: {
+                sections: {
+                    $each: [section.id],
+                    $position: order
+                }
+            }
+        });
 
         res.status(201)
             .json(httpSuccess(section));
