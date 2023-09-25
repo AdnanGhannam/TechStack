@@ -1,7 +1,8 @@
 import { Express } from "express";
 import controller from "../controllers/questions.controller";
-import middlewares from "../middlewares/middlewares";
+import middlewares, { Requires } from "../middlewares/middlewares";
 import auth from "../middlewares/auth.middlewares";
+import questionMiddlewares from "../middlewares/question.middlewares";
 
 export const GET_QUESTIONS = "/questions";
 export const GET_QUESTION_BY_ID = "/questions/:id";
@@ -14,51 +15,59 @@ export const OPEN_CLOSE_QUESTION = "/question/open_close/:id";
 
 const questionRoutes = (app: Express) => {
     app.get(GET_QUESTIONS, 
-        [
-
-        ], controller.getAllEndpoint);
+        [ ], controller.getAllEndpoint);
 
     app.get(GET_QUESTION_BY_ID, 
         [
-            middlewares.checkId
+            middlewares.checkId,
+            questionMiddlewares.getQuestion
         ], controller.getByIdEndpoint);
 
     app.post(CREATE_QUESTION, 
         [
             auth.authenticate,
-            auth.authorize
+            questionMiddlewares.getBody(Requires.All).exec
         ], controller.createEndpoint);
 
     app.put(UPDATE_QUESTION, 
         [
             auth.authenticate,
-            auth.authorize,
-            middlewares.checkId
+            middlewares.checkId,
+            questionMiddlewares.getQuestion,
+            questionMiddlewares.canModify,
+            questionMiddlewares.getBody(Requires.Partial).exec
         ], controller.updateEndpoint);
 
     app.delete(REMOVE_QUESTION, 
         [
             auth.authenticate,
-            auth.authorize,
-            middlewares.checkId
+            middlewares.checkId,
+            questionMiddlewares.getQuestion,
+            questionMiddlewares.canModify
         ], controller.removeEndpoint);
 
     app.post(VOTE_TO_QUESTION, 
         [
             auth.authenticate,
-            middlewares.checkId
+            questionMiddlewares.getVote,
+            middlewares.checkId,
+            questionMiddlewares.getQuestion
         ], controller.voteEndpoint);
 
     app.delete(UNVOTE_TO_QUESTION, 
         [
             auth.authenticate,
-            middlewares.checkId
+            middlewares.checkId,
+            questionMiddlewares.getQuestion
         ], controller.unvoteEndpoint);
 
     app.put(OPEN_CLOSE_QUESTION, 
         [
             auth.authenticate,
-            middlewares.checkId
+            questionMiddlewares.getState,
+            middlewares.checkId,
+            questionMiddlewares.getQuestion,
+            questionMiddlewares.canModify
         ], controller.openCloseEndpoint);
 
 }

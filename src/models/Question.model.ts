@@ -28,7 +28,8 @@ export default class QuestionModel {
                 type: Number
             },
             views: {
-                type: Number
+                type: Number,
+                default: 0
             },
             user: {
                 type: Types.ObjectId,
