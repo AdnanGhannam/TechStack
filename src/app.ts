@@ -7,6 +7,7 @@ import middlewares from "./middlewares/middlewares";
 import articleRoutes from "./routes/article.routes";
 import sectionRoutes from "./routes/section.routes";
 import toolkitRoutes from "./routes/toolkit.routes";
+import questionRoutes from "./routes/question.routes";
 
 db.init();
 
@@ -14,7 +15,7 @@ const app = express();
 
 middlewares.config(app);
 
-routes.config(app, userRoutes, articleRoutes, sectionRoutes, toolkitRoutes);
+routes.config(app, userRoutes, articleRoutes, sectionRoutes, toolkitRoutes, questionRoutes);
 
 const { PORT } = env;
 app.listen(PORT, () => {
