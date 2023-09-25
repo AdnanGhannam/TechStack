@@ -2,6 +2,7 @@ import { Document, InferSchemaType, Schema, Types, model } from "mongoose";
 import { USER_MODEL } from "./User.model";
 import { VOTE_MODEL } from "./Vote.model";
 import { ANSWER_MODEL } from "./Answer.model";
+import { TOOLKIT_MODEL } from "./Toolkit.model";
 
 export const QUESTION_MODEL = "Question";
 export type TQuestion = InferSchemaType<typeof QuestionModel.schema>;
@@ -39,6 +40,10 @@ export default class QuestionModel {
                 type: Types.ObjectId,
                 ref: VOTE_MODEL
             }],
+            toolkit: {
+                type: Types.ObjectId,
+                ref: TOOLKIT_MODEL
+            },
             answers: [{
                 type: Types.ObjectId,
                 ref: ANSWER_MODEL

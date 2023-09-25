@@ -5,9 +5,12 @@ import { httpSuccess } from "../helpers/response.helpers";
 import { tryHandle } from "../helpers/controller.helpers";
 import { UserDocument } from "../models/User.model";
 import { QuestionDocument } from "../models/Question.model";
+import { ToolkitDocument } from "../models/Toolkit.model";
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
-    const questions = await db.Question.find();
+    const { toolkit } = res.locals as { toolkit: ToolkitDocument };
+
+    const questions = await db.Question.find({ toolkit: toolkit.id });
 
     res.json(httpSuccess(questions));
 };
@@ -20,10 +23,15 @@ const getByIdEndpoint: RequestHandler = (req, res) => {
 
 const createEndpoint: RequestHandler = (req, res) => {
     const { title, content } = res.locals;
-    const { loginUser: user } = res.locals as { loginUser: UserDocument };
+    const {loginUser: user, toolkit } = res.locals as {
+        loginUser: UserDocument,
+        toolkit: ToolkitDocument
+    };
 
     tryHandle(res, async () => {
-        const question = await db.Question.create({ title, content, user: user.id });
+        const question = await db.Question.create({ title, content, user: user.id, toolkit: toolkit.id });
+
+        await toolkit.updateOne({ $push: { questions: question.id } });
 
         res.status(201).json(httpSuccess(question));
     });
@@ -43,11 +51,14 @@ const updateEndpoint: RequestHandler = (req, res) => {
     });
 };
 
-const removeEndpoint: RequestHandler = (req, res) => {
+const removeEndpoint: RequestHandler = async (req, res) => {
     const { question } = res.locals as { question: QuestionDocument };
+    const toolkit = await db.Toolkit.findById(question.toolkit);
 
     tryHandle(res, async () => {
         await question.deleteOne();
+
+        await toolkit?.updateOne({ $pull: { questions: question.id } });
 
         res.status(204).end();
     });

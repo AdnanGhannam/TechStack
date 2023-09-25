@@ -1,6 +1,7 @@
 import { Document, InferSchemaType, Schema, Types, model } from "mongoose";
 import { USER_MODEL } from "./User.model";
 import { SECTION_MODEL } from "./Section.model";
+import { QUESTION_MODEL } from "./Question.model";
 
 export const TOOLKIT_MODEL = "Toolkit";
 export const TOOLKIT_TYPES = ["language", "library", "framework"];
@@ -37,6 +38,10 @@ export default class ToolkitModel {
             sections: [{
                 type: Types.ObjectId,
                 ref: SECTION_MODEL
+            }],
+            questions: [{
+                type: Types.ObjectId,
+                ref: QUESTION_MODEL
             }],
             createdAt: {
                 type: Number,

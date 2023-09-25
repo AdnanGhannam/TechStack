@@ -4,10 +4,11 @@ import middlewares, { Requires } from "../middlewares";
 import auth from "../middlewares/auth.middlewares";
 import questionMiddlewares from "../middlewares/question.middlewares";
 import answerMiddlewares from "../middlewares/answer.middlewares";
+import toolkitMiddlewares from "../middlewares/toolkit.middlewares";
 
-export const GET_QUESTIONS = "/questions";
+export const GET_QUESTIONS = "/questions/toolkits/:id";
 export const GET_QUESTION_BY_ID = "/questions/:id";
-export const CREATE_QUESTION = "/questions";
+export const CREATE_QUESTION = "/questions/toolkits/:id";
 export const UPDATE_QUESTION = "/questions/:id";
 export const REMOVE_QUESTION = "/questions/:id";
 export const VOTE_TO_QUESTION = "/questions/vote/:id";
@@ -17,7 +18,10 @@ export const ANSWER_QUESTION = "/questions/answer/:id";
 
 const questionRoutes = (app: Express) => {
     app.get(GET_QUESTIONS, 
-        [ ], controller.getAllEndpoint);
+        [
+            middlewares.checkId,
+            toolkitMiddlewares.getToolkit
+        ], controller.getAllEndpoint);
 
     app.get(GET_QUESTION_BY_ID, 
         [
@@ -28,6 +32,8 @@ const questionRoutes = (app: Express) => {
     app.post(CREATE_QUESTION, 
         [
             auth.authenticate,
+            middlewares.checkId,
+            toolkitMiddlewares.getToolkit,
             questionMiddlewares.getBody(Requires.All).exec
         ], controller.createEndpoint);
 
