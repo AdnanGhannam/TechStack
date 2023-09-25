@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import env from "../config/env.config";
 import { httpError, httpSuccess } from "../helpers/response.helpers";
 import { Types } from "mongoose";
-import db from "../models/models";
+import db from "../models";
 import { tryHandle } from "../helpers/controller.helpers";
 import { UserDocument } from "../models/User.model";
 import { ArticleDocument } from "../models/Article.model";

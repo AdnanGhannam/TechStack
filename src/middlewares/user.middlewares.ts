@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { httpError } from "../helpers/response.helpers";
-import db from "../models/models";
+import db from "../models";
 import { CHANGE_PASSWORD, LOGIN, REGISTER, UPDATE_USER } from "../routes/user.routes";
 import { createHash } from "crypto";
 import UserModel from "../models/User.model";

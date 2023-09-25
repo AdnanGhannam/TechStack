@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { httpError, httpSuccess } from "../helpers/response.helpers";
 import { tryHandle } from "../helpers/controller.helpers";
-import db from "../models/models";
+import db from "../models";
 import { ArticleDocument } from "../models/Article.model";
 import { UserDocument } from "../models/User.model";
 import { ReactionDocument } from "../models/Reaction.model";

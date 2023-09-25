@@ -1,7 +1,7 @@
 import { Express } from "express";
 import controller from "../controllers/toolkits.controller";
 import auth from "../middlewares/auth.middlewares";
-import middlewares, { Requires } from "../middlewares/middlewares";
+import middlewares, { Requires } from "../middlewares";
 import toolkitMiddlewares from "../middlewares/toolkit.middlewares";
 import sectionMiddlewares from "../middlewares/section.middlewares";
 

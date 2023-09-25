@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
-import db from "../models/models";
+import db from "../models";
 import { httpError } from "../helpers/response.helpers";
 import { CREATE_TOOLKIT } from "../routes/toolkit.routes";
-import { Requires } from "./middlewares";
+import { Requires } from ".";
 
 const getBody = (requires: Requires) => {
     const exec: RequestHandler = (req, res, next) => {

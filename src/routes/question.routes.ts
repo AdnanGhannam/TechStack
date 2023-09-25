@@ -1,6 +1,6 @@
 import { Express } from "express";
 import controller from "../controllers/questions.controller";
-import middlewares, { Requires } from "../middlewares/middlewares";
+import middlewares, { Requires } from "../middlewares";
 import auth from "../middlewares/auth.middlewares";
 import questionMiddlewares from "../middlewares/question.middlewares";
 

@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
-import db from "../models/models";
+import db from "../models";
 import { httpError } from "../helpers/response.helpers";
-import { Requires } from "./middlewares";
+import { Requires } from ".";
 
 const getArticle: RequestHandler = async (req, res, next) => {
     const { id } = req.params;

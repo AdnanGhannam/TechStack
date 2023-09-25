@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
-import db from "../models/models";
+import db from "../models";
 import { httpError } from "../helpers/response.helpers";
-import { Requires } from "./middlewares";
+import { Requires } from ".";
 import { UserDocument } from "../models/User.model";
 import { QuestionDocument } from "../models/Question.model";
 

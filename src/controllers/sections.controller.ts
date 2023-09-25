@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { tryHandle } from "../helpers/controller.helpers";
-import db from "../models/models";
+import db from "../models";
 import { httpError, httpMongoError, httpSuccess } from "../helpers/response.helpers";
 import { UserDocument } from "../models/User.model";
 import { SectionDocument } from "../models/Section.model";

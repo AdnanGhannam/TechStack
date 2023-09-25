@@ -1,7 +1,7 @@
 import { Express } from "express";
 import controller from "../controllers/articles.controller";
 import auth from "../middlewares/auth.middlewares";
-import middlewares from "../middlewares/middlewares";
+import middlewares from "../middlewares";
 import articleMiddlewares from "../middlewares/article.middlewares";
 
 export const GET_ARTICLE = "/articles/:id";

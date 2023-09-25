@@ -3,7 +3,7 @@ import controller from "../controllers/sections.controller";
 import sectionMiddlewares from "../middlewares/section.middlewares";
 import toolkitMiddlewares from "../middlewares/toolkit.middlewares";
 import auth from "../middlewares/auth.middlewares";
-import middlewares, { Requires } from "../middlewares/middlewares";
+import middlewares, { Requires } from "../middlewares";
 import articleMiddlewares from "../middlewares/article.middlewares";
 
 export const GET_SECTION = "/sections/:id";

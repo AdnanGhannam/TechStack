@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
-import db from "../models/models";
+import db from "../models";
 import { httpError } from "../helpers/response.helpers";
 import { SECTION_TYPES } from "../models/Section.model";
-import { Requires } from "./middlewares";
+import { Requires } from ".";
 
 const getSection: RequestHandler = async (req, res, next) => {
     const { id } = req.params;

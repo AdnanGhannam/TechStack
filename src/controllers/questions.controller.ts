@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import IQuestionsController from "../interfaces/IQuestionsController";
-import db from "../models/models";
+import db from "../models";
 import { httpSuccess } from "../helpers/response.helpers";
 import { tryHandle } from "../helpers/controller.helpers";
 import { UserDocument } from "../models/User.model";

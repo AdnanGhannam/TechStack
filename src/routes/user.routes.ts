@@ -3,7 +3,7 @@ import controller from "../controllers/users.controller";
 import userMiddlewares from "../middlewares/user.middlewares";
 import articleMiddlewares from "../middlewares/article.middlewares";
 import auth from "../middlewares/auth.middlewares";
-import middlewares from "../middlewares/middlewares";
+import middlewares from "../middlewares";
 
 export const LOGIN = "/login";
 export const ADMINS_LOGIN = "/admins/login";
