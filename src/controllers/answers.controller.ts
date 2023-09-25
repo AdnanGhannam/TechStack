@@ -5,9 +5,6 @@ import { AnswerDocument } from "../models/Answer.model";
 import { UserDocument } from "../models/User.model";
 import db from "../models";
 
-const createEndpoint: RequestHandler = (req, res) => {
-};
-
 const updateEndpoint: RequestHandler = (req, res) => {
     const { answer } = res.locals as { answer: AnswerDocument };
     const { content } = res.locals;
@@ -19,11 +16,14 @@ const updateEndpoint: RequestHandler = (req, res) => {
     });
 };
 
-const removeEndpoint: RequestHandler = (req, res) => {
+const removeEndpoint: RequestHandler = async (req, res) => {
     const { answer } = res.locals as { answer: AnswerDocument };
+    const question = await db.Question.findById(answer.question);
 
     tryHandle(res, async () => {
         await answer.deleteOne();
+
+        question?.updateOne({ $pull: { answers: answer.id } });
 
         res.status(204).end();
     });
@@ -74,7 +74,6 @@ const makeAsCorrectEndpoint: RequestHandler = (req, res) => {
 };
 
 const controller: IAnswersController = {
-    createEndpoint,
     updateEndpoint,
     removeEndpoint,
     voteEndpoint,

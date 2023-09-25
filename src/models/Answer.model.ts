@@ -1,6 +1,7 @@
 import { Document, InferSchemaType, Schema, Types, model } from "mongoose";
 import { USER_MODEL } from "./User.model";
 import { VOTE_MODEL } from "./Vote.model";
+import { QUESTION_MODEL } from "./Question.model";
 
 export const ANSWER_MODEL = "Answer";
 export type TAnswer = InferSchemaType<typeof AnswerModel.schema>;
@@ -9,6 +10,10 @@ export type AnswerDocument = Document<unknown, {}, TAnswer> & TAnswer;
 export default class AnswerModel {
     static get schema() {
         return new Schema({
+            question: {
+                type: Types.ObjectId,
+                ref: QUESTION_MODEL
+            },
             user: {
                 type: Types.ObjectId,
                 ref: USER_MODEL

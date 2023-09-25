@@ -9,4 +9,5 @@ export default interface IQuestionsController {
     voteEndpoint: RequestHandler;
     unvoteEndpoint: RequestHandler;
     openCloseEndpoint: RequestHandler;
+    answerEndpoint: RequestHandler;
 };

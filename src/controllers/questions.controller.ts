@@ -98,6 +98,25 @@ const openCloseEndpoint: RequestHandler = (req, res) => {
     });
 };
 
+const answerEndpoint: RequestHandler = (req, res) => {
+    const { content } = res.locals;
+    const { loginUser: user, question } = res.locals as {
+        loginUser: UserDocument,
+        question: QuestionDocument
+    };
+
+    tryHandle(res, async () => {
+        const answer = await db.Answer.create({
+            user: user.id,
+            content
+        });
+
+        question.updateOne({ $push: { answers: answer.id } });
+
+        res.status(201).json(httpSuccess(answer));
+    });
+};
+
 const controller: IQuestionsController = {
     getAllEndpoint,
     getByIdEndpoint,
@@ -106,7 +125,8 @@ const controller: IQuestionsController = {
     removeEndpoint,
     voteEndpoint,
     unvoteEndpoint,
-    openCloseEndpoint
+    openCloseEndpoint,
+    answerEndpoint
 };
 
 export default controller;

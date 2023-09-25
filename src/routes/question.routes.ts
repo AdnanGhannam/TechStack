@@ -3,6 +3,7 @@ import controller from "../controllers/questions.controller";
 import middlewares, { Requires } from "../middlewares";
 import auth from "../middlewares/auth.middlewares";
 import questionMiddlewares from "../middlewares/question.middlewares";
+import answerMiddlewares from "../middlewares/answer.middlewares";
 
 export const GET_QUESTIONS = "/questions";
 export const GET_QUESTION_BY_ID = "/questions/:id";
@@ -11,7 +12,8 @@ export const UPDATE_QUESTION = "/questions/:id";
 export const REMOVE_QUESTION = "/questions/:id";
 export const VOTE_TO_QUESTION = "/questions/vote/:id";
 export const UNVOTE_TO_QUESTION = "/questions/vote/:id";
-export const OPEN_CLOSE_QUESTION = "/question/open_close/:id";
+export const OPEN_CLOSE_QUESTION = "/questions/open_close/:id";
+export const ANSWER_QUESTION = "/questions/answer/:id";
 
 const questionRoutes = (app: Express) => {
     app.get(GET_QUESTIONS, 
@@ -70,6 +72,13 @@ const questionRoutes = (app: Express) => {
             questionMiddlewares.canModify
         ], controller.openCloseEndpoint);
 
+    app.post(ANSWER_QUESTION,
+        [
+            auth.authenticate,
+            middlewares.checkId,
+            answerMiddlewares.getBody,
+            questionMiddlewares.getQuestion
+        ], controller.answerEndpoint);
 }
 
 export default questionRoutes;

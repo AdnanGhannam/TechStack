@@ -5,7 +5,6 @@ import answerMiddlewares from "../middlewares/answer.middlewares";
 import questionMiddlewares from "../middlewares/question.middlewares";
 import middlewares from "../middlewares";
 
-export const CREATE_ANSWER = "/answers";
 export const UPDATE_ANSWER = "/answers/:id";
 export const REMOVE_ANSWER = "/answers/:id";
 export const VOTE_TO_ANSWER = "/answers/vote/:id";
@@ -13,12 +12,6 @@ export const UNVOTE_TO_ANSWER = "/answers/vote/:id";
 export const MARK_AS_CORRECT = "/answers/correct/:id"; 
 
 const answerRoutes = (app: Express) => {
-    app.post(CREATE_ANSWER,
-        [
-            auth.authenticate,
-            answerMiddlewares.getBody
-        ], controller.createEndpoint);
-
     app.put(UPDATE_ANSWER,
         [
             auth.authenticate,
