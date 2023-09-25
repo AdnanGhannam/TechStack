@@ -8,6 +8,7 @@ import articleRoutes from "./routes/article.routes";
 import sectionRoutes from "./routes/section.routes";
 import toolkitRoutes from "./routes/toolkit.routes";
 import questionRoutes from "./routes/question.routes";
+import answerRoutes from "./routes/answer.routes";
 
 db.init();
 
@@ -15,7 +16,13 @@ const app = express();
 
 middlewares.config(app);
 
-routes.config(app, userRoutes, articleRoutes, sectionRoutes, toolkitRoutes, questionRoutes);
+routes.config(app, 
+    userRoutes, 
+    articleRoutes, 
+    sectionRoutes, 
+    toolkitRoutes, 
+    questionRoutes,
+    answerRoutes);
 
 const { PORT } = env;
 app.listen(PORT, () => {
