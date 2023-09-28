@@ -3,7 +3,7 @@ import { httpError } from "../helpers/response.helpers";
 import db from "../models";
 import { CHANGE_PASSWORD, LOGIN, REGISTER, UPDATE_USER } from "../routes/user.routes";
 import { createHash } from "crypto";
-import UserModel from "../models/User.model";
+import UserModel, { UserDocument } from "../models/User.model";
 
 /**
  * @passes Name, Email, Password, NewPassword
@@ -25,7 +25,7 @@ const getBody: RequestHandler = (req, res, next) => {
             }
             break;
         case CHANGE_PASSWORD:
-            if (!password && !newPassword) {
+            if (!password || !newPassword) {
                 return res.status(400)
                     .json(httpError("The 'password' and 'newPassword' fields are required"));
             }
@@ -86,11 +86,12 @@ const getUserById: RequestHandler = async (req, res, next) => {
  * @requires User, Password
  */
 const checkPassword: RequestHandler = (req, res, next) => {
-    const { user, password } = res.locals;
+    const { loginUser, user } = res.locals as { loginUser: UserDocument, user: UserDocument };
+    const { password } = res.locals;
 
     const hashed = createHash('sha256').update(password).digest('hex');
 
-    if (user.password != hashed) {
+    if ((loginUser && loginUser.password != hashed) || (user && user.password != hashed)) {
         return res.status(400)
             .json(httpError(`Password is wrong`));
     }
@@ -105,7 +106,7 @@ const checkPassword: RequestHandler = (req, res, next) => {
 const cryptPassword: RequestHandler = (req, res, next) => {
     const { password, newPassword } = res.locals;
 
-    const errorMessage = UserModel.validatePassword(newPassword ?? password);
+    const errorMessage = UserModel.validatePassword(newPassword || password);
 
     if (errorMessage) {
         return res.status(400).json(httpError(errorMessage));
