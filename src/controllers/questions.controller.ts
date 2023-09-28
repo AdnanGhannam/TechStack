@@ -10,13 +10,15 @@ import { ToolkitDocument } from "../models/Toolkit.model";
 const getAllEndpoint: RequestHandler = async (req, res) => {
     const { toolkit } = res.locals as { toolkit: ToolkitDocument };
 
-    const questions = await db.Question.find({ toolkit: toolkit.id });
+    const questions = await db.Question.find({ toolkit: toolkit.id }).populate("user");
 
     res.json(httpSuccess(questions));
 };
 
-const getByIdEndpoint: RequestHandler = (req, res) => {
+const getByIdEndpoint: RequestHandler = async (req, res) => {
     const { question } = res.locals;
+
+    await question.updateOne({ $inc: { views: 1 }});
 
     res.json(httpSuccess(question));
 };
@@ -122,7 +124,7 @@ const answerEndpoint: RequestHandler = (req, res) => {
             content
         });
 
-        question.updateOne({ $push: { answers: answer.id } });
+        await question.updateOne({ $push: { answers: answer.id } });
 
         res.status(201).json(httpSuccess(answer));
     });

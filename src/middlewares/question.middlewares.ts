@@ -8,7 +8,12 @@ import { QuestionDocument } from "../models/Question.model";
 const getQuestion: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
 
-    const question = await db.Question.findById(id).populate("user answers");
+    const question = await db.Question.findById(id)
+        .populate("user")
+        .populate({
+            path: "answers",
+            populate: { path: "user" }
+        });
 
     if (!question) {
         return res.status(404)
