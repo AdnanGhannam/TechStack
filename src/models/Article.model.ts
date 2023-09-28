@@ -71,12 +71,13 @@ export default class ArticleModel {
 
     static create() {
         const schema = this.schema;
+
         schema.pre("save", function() {
             if (!this.lastUpdateFrom) {
                 this.lastUpdateFrom = this.creators[0];
             }
         });
-
+        
         return model(ARTICLE_MODEL, schema);
     }
 }

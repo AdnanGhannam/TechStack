@@ -34,9 +34,10 @@ const removeEndpoint: RequestHandler = (req, res) => {
     const { section } = res.locals as { section: SectionDocument };
 
     tryHandle(res, async () => {
+        await section.deleteOne();
+        await db.Toolkit.findByIdAndUpdate(section.id, { $pull: { sections: section.id } });
         await db.Article.deleteMany({ _id: { $in: section.articles }});
 
-        await section.deleteOne();
 
         res.status(204).end();
     });

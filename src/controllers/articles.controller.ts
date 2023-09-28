@@ -46,8 +46,8 @@ const removeEndpoint: RequestHandler = (req, res) => {
     const { article } = res.locals as { article: ArticleDocument };
 
     tryHandle(res, async () => {
-        await db.Section.findByIdAndUpdate(article.section, { $pull: { articles: article.id } });
         await article.deleteOne();
+        await db.Section.findByIdAndUpdate(article.section, { $pull: { articles: article.id } });
 
         res.status(204).end();
     });

@@ -24,10 +24,20 @@ const createEndpoint: RequestHandler = (req, res) => {
 };
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
-    const toolkits = await db.Toolkit.find();
-    // TODO include top 5
+    const { include } = req.query;
 
-    res.json(httpSuccess(toolkits));
+
+    let toolkits = db.Toolkit.find();
+
+    if (include == "true") {
+        toolkits = toolkits.populate({
+            path: "sections",
+            options: { limit: 8 },
+            select: "title type"
+        });
+    }
+
+    res.json(httpSuccess(await toolkits));
 };
 
 const getByIdEndpoint: RequestHandler = async (req, res) => {
@@ -57,6 +67,9 @@ const removeEndpoint: RequestHandler = (req, res) => {
 
     tryHandle(res, async () => {
         await toolkit.deleteOne();
+        await db.Section.deleteMany({ toolkit: toolkit.id });
+        await db.Article.deleteMany({ toolkit: toolkit.id });
+        await db.Question.deleteMany({ toolkit: toolkit.id });
 
         res.status(204).end();
     });
