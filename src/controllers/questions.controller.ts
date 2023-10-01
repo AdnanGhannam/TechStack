@@ -59,6 +59,7 @@ const removeEndpoint: RequestHandler = async (req, res) => {
 
     tryHandle(res, async () => {
         await question.deleteOne();
+        await db.Answer.deleteMany({ question: question.id });
 
         await toolkit?.updateOne({ $pull: { questions: question.id } });
 
@@ -74,12 +75,19 @@ const voteEndpoint: RequestHandler = (req, res) => {
     };
 
     tryHandle(res, async () => {
-        const newVote = await db.Vote.create({
-            user: user.id,
-            value: vote == "up" ? 1 : -1
-        });
+        const oldVote = await db.Vote.findOne({ on: question.id });
 
-        await question.updateOne({ $push: { votes: newVote.id } });
+        if (!oldVote) {
+            const newVote = await db.Vote.create({
+                on: question.id,
+                user: user.id,
+                value: vote == "up" ? 1 : -1
+            });
+
+            await question.updateOne({ $push: { votes: newVote.id } });
+        } else {
+            await oldVote.updateOne({ value: vote == "up" ? 1 : -1 });
+        }
 
         res.status(204).end();
     });

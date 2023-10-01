@@ -10,9 +10,10 @@ const getQuestion: RequestHandler = async (req, res, next) => {
 
     const question = await db.Question.findById(id)
         .populate("user")
+        .populate("votes")
         .populate({
             path: "answers",
-            populate: { path: "user" }
+            populate: { path: "user votes" }
         });
 
     if (!question) {

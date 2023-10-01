@@ -8,6 +8,9 @@ export type VoteDocument = Document<unknown, {}, TVote> & TVote;
 export default class VoteModel {
     static get schema() {
         return new Schema({
+            on: {
+                type: Types.ObjectId
+            },
             user: {
                 type: Types.ObjectId,
                 ref: USER_MODEL

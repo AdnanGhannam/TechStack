@@ -21,6 +21,7 @@ export default class AnswerModel {
             content: {
                 type: String,
                 required: true,
+                minlength: 30
             },
             createdAt: {
                 type: Number,

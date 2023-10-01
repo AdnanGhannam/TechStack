@@ -37,12 +37,19 @@ const voteEndpoint: RequestHandler = (req, res) => {
     };
 
     tryHandle(res, async () => {
-        const newVote = await db.Vote.create({
-            user: user.id,
-            value: vote == "up" ? 1 : -1
-        });
+        const oldVote = await db.Vote.findOne({ on: answer.id });
 
-        await answer.updateOne({ $push: { votes: newVote.id } });
+        if (!oldVote) {
+            const newVote = await db.Vote.create({
+                on: answer.id,
+                user: user.id,
+                value: vote == "up" ? 1 : -1
+            });
+
+            await answer.updateOne({ $push: { votes: newVote.id } });
+        } else {
+            await oldVote.updateOne({ value: vote == "up" ? 1 : -1 });
+        }
 
         res.status(204).end();
     });
