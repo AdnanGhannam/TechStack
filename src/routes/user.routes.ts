@@ -69,9 +69,6 @@ const userRoutes = (app: Express) => {
     app.delete(REMOVE_USER,
         [
             auth.authenticate,
-            auth.authorize,
-            middlewares.checkId,
-            userMiddlewares.getUserById
         ], controller.removeEndpoint);
 
     app.get(GET_USER_BY_ID,

@@ -16,7 +16,7 @@ const createEndpoint: RequestHandler = (req, res) => {
             description,
             type,
             company,
-            createdBy: user.id
+            creator: user.id
         });
 
         res.status(201).json(httpSuccess(toolkit));
@@ -27,7 +27,7 @@ const getAllEndpoint: RequestHandler = async (req, res) => {
     const { include } = req.query;
 
 
-    let toolkits = db.Toolkit.find();
+    let toolkits = db.Toolkit.find().populate("creator");
 
     if (include == "true") {
         toolkits = toolkits.populate({
@@ -87,14 +87,18 @@ const addToEndpoint: RequestHandler = (req, res) => {
             creator: loginUser.id,
         });
 
-        await toolkit.updateOne( {
-            $push: {
-                sections: {
-                    $each: [section],
-                    $position: order
+        if (order != '' && order >= 0) {
+            await toolkit.updateOne( {
+                $push: {
+                    sections: {
+                        $each: [section],
+                        $position: order
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            await toolkit.updateOne({ $push: { sections: section }});
+        }
 
         res.status(201)
             .json(httpSuccess(section));

@@ -5,25 +5,20 @@ import { httpError, httpSuccess } from "../helpers/response.helpers";
 import { Types } from "mongoose";
 import db from "../models";
 import { tryHandle } from "../helpers/controller.helpers";
-import { UserDocument } from "../models/User.model";
+import UserModel, { UserDocument } from "../models/User.model";
 import { ArticleDocument } from "../models/Article.model";
 import IUsersController from "../interfaces/IUsersController";
 import { ADMINS_LOGIN } from "../routes/user.routes";
 
 const loginEndpoint: RequestHandler = (req, res) => {
     const { user } = res.locals as { user: UserDocument };
-    const { SECRET } = env;
 
     if (req.route.path == ADMINS_LOGIN && user.privilege != "administrator") {
         return res.status(401)
             .json(httpError("Only admins can login here"));
     }
 
-    const expiresIn = 10800 // 3h;
-
-    const token = jwt.sign({ id: user.id }, SECRET, { expiresIn });
-
-    res.status(200).json(httpSuccess({ token, privilege: user.privilege, expiresIn, id: user.id }));
+    res.status(200).json(httpSuccess(UserModel.generateToken(user)));
 };
 
 const registerEndpoint: RequestHandler = (req, res) => {
@@ -41,12 +36,14 @@ const registerEndpoint: RequestHandler = (req, res) => {
 
         await db.Collection.create({ _id: collectionId });
 
-        res.status(201).json(httpSuccess(user));
+        res.status(201).json(httpSuccess(UserModel.generateToken(user)));
     });
 };
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
-    const users = await db.User.find();
+    const { loginUser: user } = res.locals as { loginUser: UserDocument };
+
+    const users = await db.User.find({ _id: { $ne: user.id }});
 
     res.json(httpSuccess(users));
 };

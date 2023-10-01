@@ -1,5 +1,7 @@
 import { Document, InferSchemaType, Schema, Types, model } from "mongoose";
 import { COLLECTION_MODEL } from "./Collection.model";
+import jwt from 'jsonwebtoken';
+import env from "../config/env.config";
 
 export const USER_MODEL = "User";
 export const PRIVILEGES = ["user", "administrator"];
@@ -83,5 +85,15 @@ export default class UserModel {
         }
 
         return null;
+    }
+
+    static generateToken(user: UserDocument) {
+        const { SECRET } = env;
+
+        const expiresIn = 10800 // 3h;
+
+        const token = jwt.sign({ id: user.id }, SECRET, { expiresIn });
+
+        return { token, privilege: user.privilege, expiresIn, id: user.id };
     }
 }

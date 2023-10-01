@@ -10,7 +10,7 @@ const updateEndpoint: RequestHandler = (req, res) => {
     const { content } = res.locals;
 
     tryHandle(res, async () => {
-        await answer.updateOne({ content });
+        await answer.updateOne({ content }, { runValidators: true });
 
         res.status(204).end();
     });

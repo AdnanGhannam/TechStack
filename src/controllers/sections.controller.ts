@@ -7,7 +7,14 @@ import { SectionDocument } from "../models/Section.model";
 import ISectionsController from "../interfaces/ISectionsController";
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
-    
+    const sections = await db.Section.find({})
+        .populate("creator")
+        .populate({
+            path: "toolkit",
+            select: "name"
+        });
+
+    res.json(httpSuccess(sections));
 };
 
 const getByIdEndpoint: RequestHandler = (req, res) => {
@@ -64,14 +71,18 @@ const addToEndpoint: RequestHandler = (req, res) => {
             toolkit: section.toolkit
         });
         
-        await section.updateOne({ 
-            $push: {
-                articles: {
-                    $each: [article],
-                    $position: order
+        if (order != '' && order >= 0) {
+            await section.updateOne({ 
+                $push: {
+                    articles: {
+                        $each: [article],
+                        $position: order
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            await section.updateOne({ $push: { articles: article }});
+        }
 
         res.status(201).json(httpSuccess(article));
     });

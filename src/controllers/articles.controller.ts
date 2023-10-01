@@ -7,6 +7,24 @@ import { UserDocument } from "../models/User.model";
 import { ReactionDocument } from "../models/Reaction.model";
 import IArticlesController from "../interfaces/IArticlesController";
 
+const getAllEndpoint: RequestHandler = async (req, res) => {
+    const articles = await db.Article.find({ })
+        .populate({
+            path: "creators",
+            options: { limit: 1 }
+        })
+        .populate({
+            path: "section",
+            select: "title"
+        })
+        .populate({
+            path: "toolkit",
+            select: "name"
+        });
+
+    res.json(httpSuccess(articles));
+};
+
 const getByIdEndpoint: RequestHandler = async (req, res) => {
     const { article } = res.locals as { article: ArticleDocument };
 
@@ -36,7 +54,7 @@ const updateEndpoint: RequestHandler = (req, res) => {
             description: description || article.description,
             content: content || article.content,
             lastUpdateFrom: user.id
-        });
+        }, { runValidators: true });
 
         res.status(204).end();
     });
@@ -110,7 +128,12 @@ const unReactToEndpoint: RequestHandler = (req, res) => {
 };
 
 const getFeedbacksEndpoint: RequestHandler = async (req, res) => {
-    const feedbacks = await db.Feedback.find();
+    const feedbacks = await db.Feedback.find()
+        .populate("user")
+        .populate({
+            path: "article",
+            select: "title"
+        });
 
     res.status(200).json(httpSuccess(feedbacks));
 };
@@ -154,6 +177,7 @@ const removeFeedbackEndpoint: RequestHandler = async (req, res) => {
 };
 
 const controller: IArticlesController = {
+    getAllEndpoint,
     getByIdEndpoint,
     updateEndpoint,
     removeEndpoint,

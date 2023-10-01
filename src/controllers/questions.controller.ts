@@ -47,7 +47,7 @@ const updateEndpoint: RequestHandler = (req, res) => {
         await question.updateOne({
             title: title ?? question.title,
             content: content ?? question.content
-        });
+        }, { runValidators: true });
 
         res.status(204).end();
     });

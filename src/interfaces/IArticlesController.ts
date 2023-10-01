@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 
 export default interface IArticlesController {
+    getAllEndpoint: RequestHandler;
     /**
      * @apiVersion 1.0.0
      * @api {get} /articles/:id Get article by Id

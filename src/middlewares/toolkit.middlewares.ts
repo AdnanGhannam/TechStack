@@ -34,7 +34,7 @@ const getBody = (requires: Requires) => {
 
 const getToolkit: RequestHandler = async (req, res, next) => {
     const { id } =  req.params;
-    const toolkit = await db.Toolkit.findById(id);
+    const toolkit = await db.Toolkit.findById(id).populate("creator");
 
     if (!toolkit) {
         return res.status(404)

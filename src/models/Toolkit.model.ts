@@ -30,7 +30,7 @@ export default class ToolkitModel {
                 required: true,
                 default: TOOLKIT_TYPES[0]
             },
-            createdBy: {
+            creator: {
                 type: Types.ObjectId,
                 ref: USER_MODEL,
                 required: true

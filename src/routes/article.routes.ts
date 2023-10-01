@@ -1,9 +1,10 @@
 import { Express } from "express";
 import controller from "../controllers/articles.controller";
 import auth from "../middlewares/auth.middlewares";
-import middlewares from "../middlewares";
+import middlewares, { Requires } from "../middlewares";
 import articleMiddlewares from "../middlewares/article.middlewares";
 
+export const GET_ALL_ARTICLES = "/articles";
 export const GET_ARTICLE = "/articles/:id";
 export const UPDATE_ARTICLE = "/articles/:id";
 export const REMOVE_ARTICLE = "/articles/:id";
@@ -14,6 +15,9 @@ export const SEND_FEEDBACK = "/articles/:id/send-feedback";
 export const REMOVE_FEEDBACK = "/feedbacks/:id";
 
 const articleRoutes = (app: Express) => {
+    app.get(GET_ALL_ARTICLES,
+        [ ], controller.getAllEndpoint)
+
     app.get(GET_ARTICLE,
         [
             middlewares.checkId,
@@ -26,7 +30,7 @@ const articleRoutes = (app: Express) => {
             auth.authorize,
             middlewares.checkId,
             articleMiddlewares.getArticle,
-            articleMiddlewares.getBody
+            articleMiddlewares.getBody(Requires.Partial).exec
         ], controller.updateEndpoint);
 
     app.delete(REMOVE_ARTICLE,

@@ -6,12 +6,16 @@ import auth from "../middlewares/auth.middlewares";
 import middlewares, { Requires } from "../middlewares";
 import articleMiddlewares from "../middlewares/article.middlewares";
 
+export const GET_ALL_SECTIONS = "/sections";
 export const GET_SECTION = "/sections/:id";
 export const UPDATE_SECTION = "/sections/:id";
 export const REMOVE_SECTION = "/sections/:id";
 export const ADD_TO_SECTION = "/sections/article/:id";
 
 const sectionRoutes = (app: Express) => {
+    app.get(GET_ALL_SECTIONS,
+        [ ], controller.getAllEndpoint);
+
     app.get(GET_SECTION,
         [
             middlewares.checkId,
