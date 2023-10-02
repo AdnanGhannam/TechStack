@@ -125,6 +125,14 @@ const removeByIdEndpoint: RequestHandler = async (req, res) => {
     });
 };
 
+const getMyQuestionsEndpoint: RequestHandler = async (req, res) => {
+    const { loginUser: user } = res.locals as { loginUser: UserDocument };
+
+    const questions = await db.Question.find({ user: user.id });
+
+    res.json(httpSuccess(questions));
+};
+
 const getCollectionEndpoint: RequestHandler = async (req, res) => {
     const { loginUser } = res.locals as { loginUser: UserDocument };
 
@@ -200,6 +208,7 @@ const controller: IUsersController = {
     removeEndpoint,
     updateByIdEndpoint,
     removeByIdEndpoint,
+    getMyQuestionsEndpoint,
     getCollectionEndpoint,
     addToCollectionEndpoint,
     removeFromCollectionEndpoint

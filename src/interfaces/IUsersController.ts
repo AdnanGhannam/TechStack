@@ -183,6 +183,8 @@ export default interface IUsersController {
 
     removeByIdEndpoint: RequestHandler,
 
+    getMyQuestionsEndpoint: RequestHandler;
+
     /**
      * @apiVersion 1.0.0
      * @api {get} /collection Get personal collection

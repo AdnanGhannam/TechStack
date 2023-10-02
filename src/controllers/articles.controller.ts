@@ -34,6 +34,13 @@ const getByIdEndpoint: RequestHandler = async (req, res) => {
         .json(httpSuccess(article));
 };
 
+
+const getPopulareEndpoint: RequestHandler = async (req, res) => {
+    const top = await db.Article.find().sort("-views").limit(5).select("title description");
+
+    res.json(httpSuccess(top));
+};
+
 const updateEndpoint: RequestHandler = (req, res) => {
     const { title, description, content } = res.locals;
     const { 
@@ -179,6 +186,7 @@ const removeFeedbackEndpoint: RequestHandler = async (req, res) => {
 const controller: IArticlesController = {
     getAllEndpoint,
     getByIdEndpoint,
+    getPopulareEndpoint,
     updateEndpoint,
     removeEndpoint,
     reactToEndpoint,

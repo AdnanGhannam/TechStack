@@ -6,6 +6,7 @@ import articleMiddlewares from "../middlewares/article.middlewares";
 
 export const GET_ALL_ARTICLES = "/articles";
 export const GET_ARTICLE = "/articles/:id";
+export const GET_POPULARE_ARTICLES = "/populare/articles";
 export const UPDATE_ARTICLE = "/articles/:id";
 export const REMOVE_ARTICLE = "/articles/:id";
 export const REACT_TO_ARTICLE = "/react/articles/:id";
@@ -23,6 +24,9 @@ const articleRoutes = (app: Express) => {
             middlewares.checkId,
             articleMiddlewares.getArticle
         ], controller.getByIdEndpoint);
+
+    app.get(GET_POPULARE_ARTICLES, 
+        [ ], controller.getPopulareEndpoint);
 
     app.put(UPDATE_ARTICLE,
         [

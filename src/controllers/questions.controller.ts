@@ -23,6 +23,12 @@ const getByIdEndpoint: RequestHandler = async (req, res) => {
     res.json(httpSuccess(question));
 };
 
+const getPopulareEndpoint: RequestHandler = async (req, res) => {
+    const top = await db.Question.find().sort("-views").limit(5).select("title");
+
+    res.json(httpSuccess(top));
+};
+
 const createEndpoint: RequestHandler = (req, res) => {
     const { title, content } = res.locals;
     const {loginUser: user, toolkit } = res.locals as {
@@ -141,6 +147,7 @@ const answerEndpoint: RequestHandler = (req, res) => {
 const controller: IQuestionsController = {
     getAllEndpoint,
     getByIdEndpoint,
+    getPopulareEndpoint,
     createEndpoint,
     updateEndpoint,
     removeEndpoint,

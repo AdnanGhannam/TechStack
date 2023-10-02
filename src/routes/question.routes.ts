@@ -8,6 +8,7 @@ import toolkitMiddlewares from "../middlewares/toolkit.middlewares";
 
 export const GET_QUESTIONS = "/questions/toolkits/:id";
 export const GET_QUESTION_BY_ID = "/questions/:id";
+export const GET_POPULARE_QUESTIONS = "/populare/questions";
 export const CREATE_QUESTION = "/questions/toolkits/:id";
 export const UPDATE_QUESTION = "/questions/:id";
 export const REMOVE_QUESTION = "/questions/:id";
@@ -28,6 +29,9 @@ const questionRoutes = (app: Express) => {
             middlewares.checkId,
             questionMiddlewares.getQuestion
         ], controller.getByIdEndpoint);
+
+    app.get(GET_POPULARE_QUESTIONS, 
+        [ ], controller.getPopulareEndpoint);
 
     app.post(CREATE_QUESTION, 
         [

@@ -54,6 +54,8 @@ export default interface IArticlesController {
      */
     getByIdEndpoint: RequestHandler,
 
+    getPopulareEndpoint: RequestHandler;
+
     /**
      * @apiVersion 1.0.0
      * @api {put} /articles/:id Update article

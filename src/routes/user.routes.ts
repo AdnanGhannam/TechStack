@@ -16,6 +16,7 @@ export const REMOVE_USER = "/user";
 export const GET_USER_BY_ID = "/users/:id";
 export const UPDATE_USER_BY_ID = "/users/:id";
 export const REMOVE_USER_BY_ID = "/users/:id";
+export const GET_MY_QUESTIONS = "/user/my-questions";
 export const GET_COLLECTION = "/collection";
 export const ADD_TO_COLLECTION = "/collection/:id";
 export const REMOVE_FROM_COLLECTION = "/collection/:id";
@@ -93,6 +94,11 @@ const userRoutes = (app: Express) => {
             auth.authorize,
             middlewares.checkId
         ], controller.removeByIdEndpoint);
+
+    app.get(GET_MY_QUESTIONS, 
+        [
+            auth.authenticate
+        ], controller.getMyQuestionsEndpoint);
 
     app.get(GET_COLLECTION,
         [
