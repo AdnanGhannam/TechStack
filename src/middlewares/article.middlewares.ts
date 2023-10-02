@@ -5,7 +5,16 @@ import { Requires } from ".";
 
 const getArticle: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
-    const article = await db.Article.findById(id).populate("reactions creators");
+    const article = await db.Article.findById(id)
+        .populate("reactions creators")
+        .populate({
+            path: "section",
+            select: "title"
+        })
+        .populate({
+            path: "toolkit",
+            select: "name"
+        });
 
     if (!article) {
         return res.status(404)
