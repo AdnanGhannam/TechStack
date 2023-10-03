@@ -61,13 +61,14 @@ const getByIdEndpoint: RequestHandler = (req, res) => {
 };
 
 const updateEndpoint: RequestHandler = (req, res) => {
-    const { name, email } = res.locals;
+    const { name, email, phonenumber } = res.locals;
     const { loginUser: user } = res.locals as { loginUser: UserDocument };
 
     tryHandle(res, async () => {
         await user.updateOne({
             name: name || user.name,
             email: email || user.email,
+            phonenumber: phonenumber || user.phonenumber
         }, { runValidators: true });
 
         res.status(204).end();
@@ -99,13 +100,14 @@ const removeEndpoint: RequestHandler = async (req, res) => {
 };
 
 const updateByIdEndpoint: RequestHandler = (req, res) => {
-    const { name, email } = res.locals;
+    const { name, email, phonenumber } = res.locals;
     const { user } = res.locals as { user: UserDocument };
 
     tryHandle(res, async () => {
         await user.updateOne({
             name: name || user.name,
             email: email || user.email,
+            phonenumber: phonenumber || user.phonenumber
         }, { runValidators: true });
 
         res.status(204).end();
@@ -128,7 +130,7 @@ const removeByIdEndpoint: RequestHandler = async (req, res) => {
 const getMyQuestionsEndpoint: RequestHandler = async (req, res) => {
     const { loginUser: user } = res.locals as { loginUser: UserDocument };
 
-    const questions = await db.Question.find({ user: user.id });
+    const questions = await db.Question.find({ user: user.id }).select('-content');
 
     res.json(httpSuccess(questions));
 };

@@ -24,6 +24,10 @@ export default class UserModel {
                 match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                 unique: true
             },
+            phonenumber: {
+                type: String,
+                required: true
+            },
             password: {
                 type: String,
                 required: true

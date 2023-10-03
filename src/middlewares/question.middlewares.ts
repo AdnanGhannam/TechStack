@@ -57,7 +57,8 @@ const canModify: RequestHandler = (req, res, next) => {
         question: QuestionDocument
     };
 
-    if (question.user != user && user.privilege != "administrator") {
+    console.log()
+    if ((<UserDocument>question.user).id != user.id && user.privilege != "administrator") {
         return res.status(401)
             .json(httpError("You don't have privilege to make this action"));
     }

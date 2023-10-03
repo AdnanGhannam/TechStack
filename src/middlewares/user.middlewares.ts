@@ -9,7 +9,7 @@ import UserModel, { UserDocument } from "../models/User.model";
  * @passes Name, Email, Password, NewPassword
  */
 const getBody: RequestHandler = (req, res, next) => {
-    const { name, email, password, newPassword } = req.body;
+    const { name, email, phonenumber, password, newPassword } = req.body;
 
     switch(req.route.path) {
         case LOGIN:
@@ -19,9 +19,9 @@ const getBody: RequestHandler = (req, res, next) => {
             }
             break;
         case REGISTER:
-            if (!name || !email || !password) {
+            if (!name || !email || !phonenumber || !password) {
                 return res.status(400)
-                    .json(httpError("The 'name', 'email' and 'password' fields are required"));
+                    .json(httpError("The 'name', 'email', 'phonenumber' and 'password' fields are required"));
             }
             break;
         case CHANGE_PASSWORD:
@@ -31,9 +31,9 @@ const getBody: RequestHandler = (req, res, next) => {
             }
             break;
         default:
-            if (!name && !email) {
+            if (!name && !email && !phonenumber) {
                 return res.status(400)
-                    .json(httpError(`One of the following fields is required: 'name' and 'email'`));
+                    .json(httpError(`One of the following fields is required: 'name', 'email' and 'phonenumber'`));
             }
             break;
     };
