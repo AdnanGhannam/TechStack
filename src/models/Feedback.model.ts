@@ -20,7 +20,12 @@ export default class FeedbackModel {
             text: {
                 type: String,
                 required: [true, "'Text' is required"],
-                maxlength: 100
+                validate: {
+                    validator: function(value: string) {
+                        return value.length <= 300;
+                    },
+                    message: (props: any) => `'${props.path}' should no more than 300 characters, your input is ${props.value.length} characters long.` 
+                }
             },
             sentAt: {
                 type: Number,

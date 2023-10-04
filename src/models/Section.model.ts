@@ -13,8 +13,12 @@ export default class SectionModel {
         return new Schema({
             title: {
                 type: String,
-                minlength: 5,
-                maxlength: 80,
+                validate: {
+                    validator: function(value: string) {
+                        return value.length >= 5 && value.length <= 80;
+                    },
+                    message: (props: any) => `'${props.path}' should be between 5 and 80 characters, your input is ${props.value.length} characters long.` 
+                },
                 required: [true, "'Title' is required"]
             },
             type: {

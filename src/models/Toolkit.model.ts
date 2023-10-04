@@ -13,16 +13,24 @@ export default class ToolkitModel {
         return new Schema({
             name: {
                 type: String,
-                minlength: 1,
-                maxlength: 30,
+                validate: {
+                    validator: function(value: string) {
+                        return value.length >= 1 && value.length <= 30;
+                    },
+                    message: (props: any) => `'${props.path}' should be between 1 and 30 characters, your input is ${props.value.length} characters long.` 
+                },
                 required: [true, "'Name' is required"],
                 unique: true
             },
             description: {
                 type: String,
                 required: [true, "'Description' is required"],
-                minlength: 3,
-                maxlength: 500
+                validate: {
+                    validator: function(value: string) {
+                        return value.length >= 10 && value.length <= 500;
+                    },
+                    message: (props: any) => `'${props.path}' should be between 10 and 500 characters, your input is ${props.value.length} characters long.` 
+                }
             },
             type: {
                 type: String,

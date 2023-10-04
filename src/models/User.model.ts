@@ -15,8 +15,12 @@ export default class UserModel {
                 type: String,
                 required: [true, "'Name' is required"],
                 unique: true,
-                minlength: 4,
-                maxlength: 20
+                validate: {
+                    validator: function(value: string) {
+                        return value.length >= 4 && value.length <= 20;
+                    },
+                    message: (props: any) => `'${props.path}' should be between 4 and 20 characters, your input is ${props.value.length} characters long.` 
+                }
             },
             email: {
                 type: String,
