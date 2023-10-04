@@ -33,6 +33,6 @@ export default class ReactionModel {
 
     static create() {
         const schema = this.schema;
-        return model(REACTION_MODEL, schema);
+        return model<ReactionDocument>(REACTION_MODEL, schema);
     }
 }

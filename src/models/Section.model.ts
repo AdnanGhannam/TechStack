@@ -48,6 +48,6 @@ export default class SectionModel {
 
     static create() {
         const schema = this.schema;
-        return model(SECTION_MODEL, schema);
+        return model<SectionDocument>(SECTION_MODEL, schema);
     }
 }

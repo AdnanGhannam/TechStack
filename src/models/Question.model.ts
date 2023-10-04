@@ -62,6 +62,6 @@ export default class QuestionModel {
 
     static create() {
         const schema = this.schema;
-        return model(QUESTION_MODEL, schema);
+        return model<QuestionDocument>(QUESTION_MODEL, schema);
     }
 }

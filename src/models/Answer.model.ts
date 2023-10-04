@@ -43,6 +43,6 @@ export default class AnswerModel {
 
     static create() {
         const schema = this.schema;
-        return model(ANSWER_MODEL, schema);
+        return model<AnswerDocument>(ANSWER_MODEL, schema);
     }
 }

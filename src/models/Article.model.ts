@@ -87,6 +87,6 @@ export default class ArticleModel {
             }
         });
         
-        return model(ARTICLE_MODEL, schema);
+        return model<ArticleDocument>(ARTICLE_MODEL, schema);
     }
 }

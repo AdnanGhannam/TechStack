@@ -66,7 +66,7 @@ export default class UserModel {
             return userObject;
         }
 
-        return model(USER_MODEL, schema);
+        return model<UserDocument>(USER_MODEL, schema);
     }
 
     /**

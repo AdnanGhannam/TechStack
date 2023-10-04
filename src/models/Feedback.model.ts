@@ -37,6 +37,6 @@ export default class FeedbackModel {
 
     static create() {
         const schema = this.schema;
-        return model(FEEDBACK_MODEL, schema);
+        return model<FeedbackDocument>(FEEDBACK_MODEL, schema);
     }
 }

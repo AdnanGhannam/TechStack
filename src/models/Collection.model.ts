@@ -22,6 +22,6 @@ export default class CollectionModel {
 
     static create() {
         const schema = this.schema;
-        return model(COLLECTION_MODEL, schema);
+        return model<CollectionDocument>(COLLECTION_MODEL, schema);
     }
 }

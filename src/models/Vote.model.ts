@@ -24,6 +24,6 @@ export default class VoteModel {
 
     static create() {
         const schema = this.schema;
-        return model(VOTE_MODEL, schema);
+        return model<VoteDocument>(VOTE_MODEL, schema);
     }
 }

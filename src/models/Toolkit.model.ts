@@ -69,6 +69,6 @@ export default class ToolkitModel {
 
         schema.plugin(uniqueValidator, { message: "'{PATH}' is aleady used" });
 
-        return model(TOOLKIT_MODEL, schema);
+        return model<ToolkitDocument>(TOOLKIT_MODEL, schema);
     }
 }
