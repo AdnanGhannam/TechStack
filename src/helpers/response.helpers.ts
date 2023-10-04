@@ -18,7 +18,7 @@ export const httpMongoError = (err: any) => {
     if (!err.errors) {
         if (err.code == 11000) {
             const key = Object.keys(err.keyValue).at(0);
-            return httpError(`Path \`${key}\` (\`${err.keyValue[key!]}\`) is already used`);
+            return httpError(`'${key}' with value: '${err.keyValue[key!]}' is already used`);
         }
 
         return httpError(`Unknown error with code: ${err.code}`);

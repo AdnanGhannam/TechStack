@@ -14,23 +14,23 @@ export default class ArticleModel {
         return new Schema({
             title: {
                 type: String,
-                required: true,
+                required: [true, "'Title' is required"],
                 minlength: 5,
                 maxlength: 80
             },
             type: {
                 type: String,
                 enum: SECTION_TYPES,
-                required: true
+                required: [true, "'Type' is required"]
             },
             description: {
                 type: String,
-                required: true,
+                required: [true, "'Description' is required"],
                 maxlength: 300
             },
             content: {
                 type: String,
-                required: true
+                required: [true, "'Content' is required"]
             },
             createdAt: {
                 type: Number,

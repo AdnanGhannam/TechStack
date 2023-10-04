@@ -15,12 +15,12 @@ export default class SectionModel {
                 type: String,
                 minlength: 5,
                 maxlength: 80,
-                required: true
+                required: [true, "'Title' is required"]
             },
             type: {
                 type: String,
                 enum: SECTION_TYPES,
-                required: true
+                required: [true, "'Type' is required"]
             },
             createdAt: {
                 type: Number,

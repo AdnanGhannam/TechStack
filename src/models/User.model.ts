@@ -13,24 +13,24 @@ export default class UserModel {
         return new Schema({
             name: {
                 type: String,
-                required: true,
+                required: [true, "'Name' is required"],
                 unique: true,
                 minlength: 4,
                 maxlength: 20
             },
             email: {
                 type: String,
-                required: true,
+                required: [true, "'Email' is required"],
                 match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                 unique: true
             },
             phonenumber: {
                 type: String,
-                required: true
+                required: [true, "'Phonenumber' is required"],
             },
             password: {
                 type: String,
-                required: true
+                required: [true, "'Password' is required"],
             },
             privilege: {
                 type: String,

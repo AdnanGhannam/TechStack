@@ -16,7 +16,8 @@ export default class VoteModel {
                 ref: USER_MODEL
             },
             value: {
-                type: Number
+                type: Number,
+                required: [true, "'Value' is required"]
             }
         });
     }

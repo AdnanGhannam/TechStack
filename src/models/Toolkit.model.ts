@@ -15,19 +15,19 @@ export default class ToolkitModel {
                 type: String,
                 minlength: 1,
                 maxlength: 30,
-                required: true,
+                required: [true, "'Name' is required"],
                 unique: true
             },
             description: {
                 type: String,
-                required: true,
+                required: [true, "'Description' is required"],
                 minlength: 3,
                 maxlength: 500
             },
             type: {
                 type: String,
                 enum: TOOLKIT_TYPES,
-                required: true,
+                required: [true, "'Type' is required"],
                 default: TOOLKIT_TYPES[0]
             },
             creator: {
@@ -50,7 +50,7 @@ export default class ToolkitModel {
             },
             company: {
                 type: String,
-                required: true
+                required: [true, "'Company' is required"],
             }
         });
     }

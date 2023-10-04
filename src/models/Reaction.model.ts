@@ -12,7 +12,8 @@ export default class ReactionModel {
         return new Schema({
             type: {
                 type: String,
-                enum: REACTION_TYPES
+                enum: REACTION_TYPES,
+                required: [true, "'Type' is required"]
             },
             user: {
                 type: Types.ObjectId,

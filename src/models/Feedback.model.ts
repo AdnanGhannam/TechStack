@@ -19,7 +19,7 @@ export default class FeedbackModel {
             },
             text: {
                 type: String,
-                required: true,
+                required: [true, "'Text' is required"],
                 maxlength: 100
             },
             sentAt: {

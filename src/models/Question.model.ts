@@ -13,12 +13,12 @@ export default class QuestionModel {
         return new Schema({
             title: {
                 type: String,
-                required: true,
+                required: [true, "'Title' is required"],
                 maxlength: 150
             },
             content: {
                 type: String,
-                required: true,
+                required: [true, "'Content' is required"]
             },
             createdAt: {
                 type: Number,
