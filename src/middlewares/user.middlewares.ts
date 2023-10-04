@@ -42,6 +42,7 @@ const getBody: RequestHandler = (req, res, next) => {
         ...res.locals,
         name,
         email,
+        phonenumber,
         password,
         newPassword
     };

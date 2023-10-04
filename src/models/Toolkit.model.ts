@@ -2,6 +2,7 @@ import { Document, InferSchemaType, Schema, Types, model } from "mongoose";
 import { USER_MODEL } from "./User.model";
 import { SECTION_MODEL } from "./Section.model";
 import { QUESTION_MODEL } from "./Question.model";
+import uniqueValidator from "mongoose-unique-validator";
 
 export const TOOLKIT_MODEL = "Toolkit";
 export const TOOLKIT_TYPES = ["language", "library", "framework"];
@@ -65,6 +66,9 @@ export default class ToolkitModel {
 
     static create() {
         const schema = this.schema;
+
+        schema.plugin(uniqueValidator, { message: "'{PATH}' is aleady used" });
+
         return model(TOOLKIT_MODEL, schema);
     }
 }

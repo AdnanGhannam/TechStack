@@ -22,7 +22,7 @@ const loginEndpoint: RequestHandler = (req, res) => {
 };
 
 const registerEndpoint: RequestHandler = (req, res) => {
-    const { name, email, password } = res.locals;
+    const { name, email, password, phonenumber } = res.locals;
 
     tryHandle(res, async () => {
         const collectionId = new Types.ObjectId();
@@ -31,6 +31,7 @@ const registerEndpoint: RequestHandler = (req, res) => {
             name, 
             email, 
             password,
+            phonenumber,
             userCollection: collectionId
         });
 

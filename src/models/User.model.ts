@@ -2,6 +2,7 @@ import { Document, InferSchemaType, Schema, Types, model } from "mongoose";
 import { COLLECTION_MODEL } from "./Collection.model";
 import jwt from 'jsonwebtoken';
 import env from "../config/env.config";
+import uniqueValidator from "mongoose-unique-validator";
 
 export const USER_MODEL = "User";
 export const PRIVILEGES = ["user", "administrator"];
@@ -55,6 +56,9 @@ export default class UserModel {
 
     static create() {
         const schema = this.schema;
+
+        schema.plugin(uniqueValidator, { message: "'{PATH}' is aleady used" });
+
         schema.methods.toJSON = function() {
             const user = this;
             const userObject = user.toObject();
