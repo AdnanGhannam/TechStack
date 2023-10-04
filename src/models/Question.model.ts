@@ -16,9 +16,9 @@ export default class QuestionModel {
                 required: [true, "'Title' is required"],
                 validate: {
                     validator: function(value: string) {
-                        return value.length <= 150;
+                        return value.length >= 10 && value.length <= 150;
                     },
-                    message: (props: any) => `'${props.path}' should be no more than 150 characters, your input is ${props.value.length} characters long.` 
+                    message: (props: any) => `'${props.path}' should be between 10 and 150 characters, your input is ${props.value.length} characters long.` 
                 }
             },
             content: {
