@@ -6,6 +6,7 @@ import { ArticleDocument } from "../models/Article.model";
 import { UserDocument } from "../models/User.model";
 import { ReactionDocument } from "../models/Reaction.model";
 import IArticlesController from "../interfaces/IArticlesController";
+import logger from "../libraries/logger";
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
     const articles = await db.Article.find({ })
@@ -22,6 +23,7 @@ const getAllEndpoint: RequestHandler = async (req, res) => {
             select: "name"
         });
 
+    logger.info(`Return all articles`);
     res.json(httpSuccess(articles));
 };
 
@@ -30,6 +32,7 @@ const getByIdEndpoint: RequestHandler = async (req, res) => {
 
     await article.updateOne({ $inc: { views: 1 }});
 
+    logger.info(`Return article with Id: '${article.id}'`);
     res.status(200)
         .json(httpSuccess(article));
 };
@@ -38,6 +41,7 @@ const getByIdEndpoint: RequestHandler = async (req, res) => {
 const getPopulareEndpoint: RequestHandler = async (req, res) => {
     const top = await db.Article.find().sort("-views").limit(5).select("title description");
 
+    logger.info(`Return top 5 articles`);
     res.json(httpSuccess(top));
 };
 
@@ -63,17 +67,25 @@ const updateEndpoint: RequestHandler = (req, res) => {
             lastUpdateFrom: user.id
         }, { runValidators: true });
 
+        logger.info(`Update article with Id: '${article.id}' by admin with Id: '${user.id}'`);
         res.status(204).end();
     });
 };
 
 const removeEndpoint: RequestHandler = (req, res) => {
-    const { article } = res.locals as { article: ArticleDocument };
+    const { 
+        article, 
+        loginUser: user 
+    } = res.locals as {
+        article: ArticleDocument,
+        loginUser: UserDocument
+    }
 
     tryHandle(res, async () => {
         await article.deleteOne();
         await db.Section.findByIdAndUpdate(article.section, { $pull: { articles: article.id } });
 
+        logger.info(`Remove article with Id: '${article.id}' by admin with Id: '${user.id}'`);
         res.status(204).end();
     });
 };
@@ -102,6 +114,7 @@ const reactToEndpoint: RequestHandler = (req, res) => {
             await article.updateOne({ $addToSet: { reactions: newReaction.id }});
         }
 
+        logger.info(`React to article with Id: '${article.id}' by user with Id: '${loginUser.id}'`);
         res.status(204).end();
     });
 };
@@ -130,6 +143,8 @@ const unReactToEndpoint: RequestHandler = (req, res) => {
     tryHandle(res, async () => {
         await article.updateOne({ $pull: { reactions: reactionId }});
         await db.Reaction.deleteOne({ _id: reactionId });
+
+        logger.info(`Unreact to article with Id: '${article.id}' by user with Id: '${loginUser.id}'`);
         res.status(204).end();
     });
 };
@@ -142,6 +157,7 @@ const getFeedbacksEndpoint: RequestHandler = async (req, res) => {
             select: "title"
         });
 
+    logger.info(`Return feedbacks`);
     res.status(200).json(httpSuccess(feedbacks));
 };
 
@@ -169,6 +185,7 @@ const sendFeedbackEndpoint: RequestHandler = (req, res) => {
 
         await article.updateOne({ $addToSet: { feedbacks: feedback.id }});
 
+        logger.info(`Send feedback to article with Id: '${article.id}' by user with Id: '${loginUser.id}'`);
         res.status(201)
             .json(httpSuccess(feedback));
     });
@@ -176,10 +193,12 @@ const sendFeedbackEndpoint: RequestHandler = (req, res) => {
 
 const removeFeedbackEndpoint: RequestHandler = async (req, res) => {
     const { id } = req.params;
+    const { loginUser: user } = res.locals as { loginUser: UserDocument };
     const feedback = await db.Feedback.findByIdAndDelete(id);
 
     await db.Article.findByIdAndUpdate(feedback?.article, { $pull: { feedbacks: id } });
 
+    logger.info(`Send feedback with Id: '${feedback?.id}' by admin with Id: '${user.id}'`);
     res.status(204).end();
 };
 

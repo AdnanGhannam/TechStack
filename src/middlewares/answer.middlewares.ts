@@ -3,6 +3,7 @@ import { httpError } from "../helpers/response.helpers";
 import db from "../models";
 import { AnswerDocument } from "../models/Answer.model";
 import { UserDocument } from "../models/User.model";
+import logger from "../libraries/logger";
 
 const getAnswer: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
@@ -10,8 +11,10 @@ const getAnswer: RequestHandler = async (req, res, next) => {
     const answer = await db.Answer.findById(id);
 
     if (!answer) {
+        const message = `Answer with Id: '${id}' is not found`;
+        logger.error(message);
         return res.status(404)
-            .json(httpError(`Answer with Id: '${id}' is not found`));
+            .json(httpError(message));
     }
 
     res.locals.answer = answer;
@@ -39,6 +42,7 @@ const canModify: RequestHandler = (req, res, next) => {
     };
 
     if (answer.user != user && user.privilege != "administrator") {
+        logger.error(`User with Id: '${user.id}' tried to modify answer with Id: '${answer.id}'`);
         return res.status(401)
             .json(httpError("You don't have privilege to make this action"));
     }

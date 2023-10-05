@@ -5,6 +5,7 @@ import { httpError } from "../helpers/response.helpers";
 import { Types } from "mongoose";
 import db from "../models";
 import { UserDocument } from "../models/User.model";
+import logger from "../libraries/logger";
 
 /**
  * @passes loginUser
@@ -14,7 +15,7 @@ const authenticate: RequestHandler = (req, res, next) => {
     
     if (!token) {
         return res.status(403)
-            .json(httpError("JWT token is required!"));
+            .json(httpError("You have to login first"));
     }
 
     const { SECRET } = env;
@@ -39,7 +40,9 @@ const authenticate: RequestHandler = (req, res, next) => {
         const user = await db.User.findById(userId);
 
         if (!user) {
-            return res.status(404).json(httpError(`User not found`));
+            const message = `User with Id: '${userId}' is not found`;
+            logger.error(message);
+            return res.status(404).json(httpError(message));
         }
 
         res.locals.loginUser = user;
@@ -56,6 +59,7 @@ const authorize: RequestHandler = async (req, res, next) => {
     const { loginUser } = res.locals as { loginUser: UserDocument };
 
     if (loginUser.privilege != "administrator") {
+        logger.error(`User with Id: '${loginUser.id}' is trying to preform admin task`);
         return res.status(401)
             .json(httpError("You don't have privilege to make this action"));
     }

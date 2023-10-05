@@ -4,6 +4,7 @@ import db from "../models";
 import { CHANGE_PASSWORD, LOGIN, REGISTER, UPDATE_USER } from "../routes/user.routes";
 import { createHash } from "crypto";
 import UserModel, { UserDocument } from "../models/User.model";
+import logger from "../libraries/logger";
 
 /**
  * @passes Name, Email, Password, NewPassword
@@ -59,8 +60,10 @@ const getUserByName: RequestHandler = async (req, res, next) => {
     const user = await db.User.findOne({ name });
 
     if (!user) {
+        const message = `User with name: '${name}' is not found`;
+        logger.error(message);
         return res.status(404)
-            .json(httpError(`User with name: '${name}' is not found`));
+            .json(httpError(message));
     }
 
     res.locals.user = user;
@@ -75,8 +78,10 @@ const getUserById: RequestHandler = async (req, res, next) => {
     const user = await db.User.findById(id);
 
     if (!user) {
+        const message = `User with id: '${id}' is not found`;
+        logger.error(message)
         return res.status(404)
-            .json(httpError(`User with id: '${id}' is not found`));
+            .json(httpError(message));
     }
 
     res.locals.user = user;
@@ -93,6 +98,7 @@ const checkPassword: RequestHandler = (req, res, next) => {
     const hashed = createHash('sha256').update(password).digest('hex');
 
     if ((loginUser && loginUser.password != hashed) || (user && user.password != hashed)) {
+        logger.error(`Someone tried to access user with Id: '${user.id}' account with a wrong password`);
         return res.status(400)
             .json(httpError(`Password is wrong`));
     }

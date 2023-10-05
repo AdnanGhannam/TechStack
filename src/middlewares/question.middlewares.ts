@@ -4,6 +4,7 @@ import { httpError } from "../helpers/response.helpers";
 import { Requires } from ".";
 import { UserDocument } from "../models/User.model";
 import { QuestionDocument } from "../models/Question.model";
+import logger from "../libraries/logger";
 
 const getQuestion: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
@@ -17,8 +18,10 @@ const getQuestion: RequestHandler = async (req, res, next) => {
         });
 
     if (!question) {
+        const message = `Question with Id: '${id}' is not found`;
+        logger.error(message)
         return res.status(404)
-            .json(httpError(`Question with Id: '${id}' is not found`));
+            .json(httpError(message));
     }
 
     res.locals.question = question;
@@ -57,8 +60,8 @@ const canModify: RequestHandler = (req, res, next) => {
         question: QuestionDocument
     };
 
-    console.log()
     if ((<UserDocument>question.user).id != user.id && user.privilege != "administrator") {
+        logger.error(`User with Id: '${user.id}' tried to modify question with Id: '${question.id}'`);
         return res.status(401)
             .json(httpError("You don't have privilege to make this action"));
     }

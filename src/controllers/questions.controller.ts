@@ -6,12 +6,14 @@ import { tryHandle } from "../helpers/controller.helpers";
 import { UserDocument } from "../models/User.model";
 import { QuestionDocument } from "../models/Question.model";
 import { ToolkitDocument } from "../models/Toolkit.model";
+import logger from "../libraries/logger";
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
     const { toolkit } = res.locals as { toolkit: ToolkitDocument };
 
     const questions = await db.Question.find({ toolkit: toolkit.id }).populate("user");
 
+    logger.info(`Return all questions`);
     res.json(httpSuccess(questions));
 };
 
@@ -20,12 +22,14 @@ const getByIdEndpoint: RequestHandler = async (req, res) => {
 
     await question.updateOne({ $inc: { views: 1 }});
 
+    logger.info(`Return question with Id: '${question.id}'`);
     res.json(httpSuccess(question));
 };
 
 const getPopulareEndpoint: RequestHandler = async (req, res) => {
     const top = await db.Question.find().sort("-views").limit(5).select("title");
 
+    logger.info(`Return top 5 questions`);
     res.json(httpSuccess(top));
 };
 
@@ -41,13 +45,17 @@ const createEndpoint: RequestHandler = (req, res) => {
 
         await toolkit.updateOne({ $push: { questions: question.id } });
 
+        logger.info(`Add new question with Id: '${question.id}' to toolkit with Id: '${toolkit.id}' by user with Id: '${user.id}'`);
         res.status(201).json(httpSuccess(question));
     });
 };
 
 const updateEndpoint: RequestHandler = (req, res) => {
     const { title, content } = res.locals;
-    const { question } = res.locals as { question: QuestionDocument };
+    const { question, loginUser: user } = res.locals as { 
+        question: QuestionDocument,
+        loginUser: UserDocument
+    };
 
     tryHandle(res, async () => {
         await question.updateOne({
@@ -55,12 +63,16 @@ const updateEndpoint: RequestHandler = (req, res) => {
             content: content ?? question.content
         }, { runValidators: true });
 
+        logger.info(`Update question with Id: '${question.id}' by user with Id: '${user.id}'`);
         res.status(204).end();
     });
 };
 
 const removeEndpoint: RequestHandler = async (req, res) => {
-    const { question } = res.locals as { question: QuestionDocument };
+    const { question, loginUser: user } = res.locals as { 
+        question: QuestionDocument,
+        loginUser: UserDocument
+    };
     const toolkit = await db.Toolkit.findById(question.toolkit);
 
     tryHandle(res, async () => {
@@ -69,6 +81,7 @@ const removeEndpoint: RequestHandler = async (req, res) => {
 
         await toolkit?.updateOne({ $pull: { questions: question.id } });
 
+        logger.info(`Remove question with Id: '${question.id}' by user with Id: '${user.id}'`);
         res.status(204).end();
     });
 };
@@ -95,6 +108,7 @@ const voteEndpoint: RequestHandler = (req, res) => {
             await oldVote.updateOne({ value: vote == "up" ? 1 : -1 });
         }
 
+        logger.info(`User with Id: '${user.id}' voted to question with Id: '${question.id}'`);
         res.status(204).end();
     });
 };
@@ -110,17 +124,22 @@ const unvoteEndpoint: RequestHandler = (req, res) => {
 
         await question.updateOne({ $pull: { votes: vote?.id } });
 
+        logger.info(`User with Id: '${user.id}' unvoted to question with Id: '${question.id}'`);
         res.status(204).end();
     });
 };
 
 const openCloseEndpoint: RequestHandler = (req, res) => {
     const { state } = req.query;
-    const { question } = res.locals as { question: QuestionDocument };
+    const { question, loginUser: user } = res.locals as {
+        question: QuestionDocument,
+        loginUser: UserDocument
+    };
 
     tryHandle(res, async () => {
         await question.updateOne({ isOpen: state == "true" });
         
+        logger.info(`User with Id: '${user.id}' updated state of question with Id: '${question.id}'`);
         res.status(204).end();
     });
 };
@@ -140,6 +159,7 @@ const answerEndpoint: RequestHandler = (req, res) => {
 
         await question.updateOne({ $push: { answers: answer.id } });
 
+        logger.info(`User with Id: '${user.id}' answered question with Id: '${question.id}'`);
         res.status(201).json(httpSuccess(answer));
     });
 };

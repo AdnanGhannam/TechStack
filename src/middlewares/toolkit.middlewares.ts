@@ -3,6 +3,7 @@ import db from "../models";
 import { httpError } from "../helpers/response.helpers";
 import { CREATE_TOOLKIT } from "../routes/toolkit.routes";
 import { Requires } from ".";
+import logger from "../libraries/logger";
 
 const getBody = (requires: Requires) => {
     const exec: RequestHandler = (req, res, next) => {
@@ -37,8 +38,10 @@ const getToolkit: RequestHandler = async (req, res, next) => {
     const toolkit = await db.Toolkit.findById(id).populate("creator");
 
     if (!toolkit) {
+        const message = `Toolkit with id: '${id}' is not found`;
+        logger.error(message);
         return res.status(404)
-            .json(httpError(`Toolkit with id: '${id}' is not found`));
+            .json(httpError(message));
     }
 
     res.locals.toolkit = toolkit;

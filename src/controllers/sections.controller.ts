@@ -5,6 +5,7 @@ import { httpError, httpMongoError, httpSuccess } from "../helpers/response.help
 import { UserDocument } from "../models/User.model";
 import { SectionDocument } from "../models/Section.model";
 import ISectionsController from "../interfaces/ISectionsController";
+import logger from "../libraries/logger";
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
     const sections = await db.Section.find({})
@@ -14,18 +15,23 @@ const getAllEndpoint: RequestHandler = async (req, res) => {
             select: "name"
         });
 
+    logger.info(`Return all sections`);
     res.json(httpSuccess(sections));
 };
 
 const getByIdEndpoint: RequestHandler = (req, res) => {
     const { section } = res.locals as { section: SectionDocument };
 
+    logger.info(`Return section with Id: '${section.id}'`);
     res.status(200).json(httpSuccess(section));
 };
 
 const updateEndpoint: RequestHandler = (req, res) => {
     const { title, type } = res.locals;
-    const { section } = res.locals as { section: SectionDocument };
+    const { section, loginUser: user } = res.locals as { 
+        section: SectionDocument,
+        loginUser: UserDocument
+    };
 
     tryHandle(res, async () => {
         await section.updateOne({
@@ -33,19 +39,23 @@ const updateEndpoint: RequestHandler = (req, res) => {
             type: type || section.type
         });
 
+        logger.info(`Update section with Id: '${section.id}' by admin with Id: '${user.id}'`);
         res.status(204).end();
     });
 };
 
 const removeEndpoint: RequestHandler = (req, res) => {
-    const { section } = res.locals as { section: SectionDocument };
+    const { section, loginUser: user } = res.locals as { 
+        section: SectionDocument,
+        loginUser: UserDocument
+    };
 
     tryHandle(res, async () => {
         await section.deleteOne();
         await db.Toolkit.findByIdAndUpdate(section.id, { $pull: { sections: section.id } });
         await db.Article.deleteMany({ _id: { $in: section.articles }});
 
-
+        logger.info(`Remove section with Id: '${section.id}' by admin with Id: '${user.id}'`);
         res.status(204).end();
     });
 };
@@ -84,6 +94,7 @@ const addToEndpoint: RequestHandler = (req, res) => {
             await section.updateOne({ $push: { articles: article }});
         }
 
+        logger.info(`Add new article with Id: '${article.id}', to section with Id: '${section.id}' by admin with Id: '${user.id}'`);
         res.status(201).json(httpSuccess(article));
     });
 };

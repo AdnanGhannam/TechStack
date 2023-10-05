@@ -5,6 +5,7 @@ import { httpSuccess } from "../helpers/response.helpers";
 import { tryHandle } from "../helpers/controller.helpers";
 import ToolkitModel, { ToolkitDocument } from "../models/Toolkit.model";
 import { UserDocument } from "../models/User.model";
+import logger from "../libraries/logger";
 
 const createEndpoint: RequestHandler = (req, res) => {
     const { loginUser: user } = res.locals as { loginUser: UserDocument };
@@ -19,6 +20,7 @@ const createEndpoint: RequestHandler = (req, res) => {
             creator: user.id
         });
 
+        logger.info(`New toolkit create with Id: '${toolkit.id}'`);
         res.status(201).json(httpSuccess(toolkit));
     });
 };
@@ -26,8 +28,7 @@ const createEndpoint: RequestHandler = (req, res) => {
 const getAllEndpoint: RequestHandler = async (req, res) => {
     const { include } = req.query;
 
-
-    let toolkits = db.Toolkit.find().populate("creator");
+    let toolkits: any = db.Toolkit.find().populate("creator");
 
     if (include == "true") {
         toolkits = toolkits.populate({
@@ -37,18 +38,23 @@ const getAllEndpoint: RequestHandler = async (req, res) => {
         });
     }
 
+    logger.info(`Return all toolkits`);
     res.json(httpSuccess(await toolkits));
 };
 
 const getByIdEndpoint: RequestHandler = async (req, res) => {
     const { toolkit } = res.locals;
 
+    logger.info(`Return toolkit with Id: '${toolkit.id}'`);
     res.json(httpSuccess(toolkit));
 };
     
 const updateEndpoint: RequestHandler = (req, res) => {
-    const { toolkit } = res.locals as { toolkit: ToolkitDocument };
     const { name, description, type, company } = res.locals;
+    const { toolkit, loginUser: user } = res.locals as { 
+        toolkit: ToolkitDocument, 
+        loginUser: UserDocument
+    };
 
     tryHandle(res, async () => {
         await toolkit.updateOne({
@@ -58,12 +64,16 @@ const updateEndpoint: RequestHandler = (req, res) => {
             company: company ?? toolkit.company
         });
 
+        logger.info(`Update toolkit with Id: '${toolkit.id}' by admin with Id: '${user.id}'`);
         res.status(204).end();
     });
 };
     
 const removeEndpoint: RequestHandler = (req, res) => {
-    const { toolkit } = res.locals as { toolkit: ToolkitDocument };
+    const { toolkit, loginUser: user } = res.locals as { 
+        toolkit: ToolkitDocument, 
+        loginUser: UserDocument
+    };
 
     tryHandle(res, async () => {
         await toolkit.deleteOne();
@@ -71,6 +81,7 @@ const removeEndpoint: RequestHandler = (req, res) => {
         await db.Article.deleteMany({ toolkit: toolkit.id });
         await db.Question.deleteMany({ toolkit: toolkit.id });
 
+        logger.info(`Remove toolkit with Id: '${toolkit.id}' by admin with Id: '${user.id}'`);
         res.status(204).end();
     });
 };
@@ -100,8 +111,8 @@ const addToEndpoint: RequestHandler = (req, res) => {
             await toolkit.updateOne({ $push: { sections: section }});
         }
 
-        res.status(201)
-            .json(httpSuccess(section));
+        logger.info(`Add new section with Id: '${section.id}', to toolkit with Id: '${toolkit.id}' by admin with Id: '${loginUser.id}'`);
+        res.status(201).json(httpSuccess(section));
     });
 };
 
@@ -112,6 +123,7 @@ const getAllSectionsInEndpoint: RequestHandler = async (req, res) => {
     const sections = await db.Section.find({ type, toolkit: toolkitId })
                                     .populate("articles", "title description");
 
+    logger.info(`Return all sections in toolkit with Id: '${toolkitId}'`);
     res.status(200)
         .json(httpSuccess(sections));
 };

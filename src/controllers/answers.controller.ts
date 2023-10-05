@@ -4,6 +4,7 @@ import { tryHandle } from "../helpers/controller.helpers";
 import { AnswerDocument } from "../models/Answer.model";
 import { UserDocument } from "../models/User.model";
 import db from "../models";
+import logger from "../libraries/logger";
 
 const updateEndpoint: RequestHandler = (req, res) => {
     const { answer } = res.locals as { answer: AnswerDocument };
@@ -12,6 +13,7 @@ const updateEndpoint: RequestHandler = (req, res) => {
     tryHandle(res, async () => {
         await answer.updateOne({ content }, { runValidators: true });
 
+        logger.info(`Update answer with Id: '${answer.id}'`);
         res.status(204).end();
     });
 };
@@ -25,6 +27,7 @@ const removeEndpoint: RequestHandler = async (req, res) => {
 
         question?.updateOne({ $pull: { answers: answer.id } });
 
+        logger.info(`Remove answer with Id: '${answer.id}'`);
         res.status(204).end();
     });
 };
@@ -51,6 +54,7 @@ const voteEndpoint: RequestHandler = (req, res) => {
             await oldVote.updateOne({ value: vote == "up" ? 1 : -1 });
         }
 
+        logger.info(`User with Id: '${user.id}' voted to answer with Id: '${answer.id}'`);
         res.status(204).end();
     });
 };
@@ -66,6 +70,7 @@ const unvoteEndpoint: RequestHandler = (req, res) => {
 
         await answer.updateOne({ $pull: { votes: vote?.id } });
 
+        logger.info(`User with Id: '${user.id}' unvoted to answer with Id: '${answer.id}'`);
         res.status(204).end();
     });
 };
@@ -76,6 +81,7 @@ const makeAsCorrectEndpoint: RequestHandler = (req, res) => {
     tryHandle(res, async () => {
         await answer.updateOne({ isCorrect: true });
 
+        logger.info(`Answer with Id: '${answer.id}' is marked as 'correct'`);
         res.status(204).end();
     });
 };

@@ -1,3 +1,5 @@
+import logger from "../libraries/logger";
+
 export const httpResponse = (success: boolean, data?: any, errors: any[] = []) => {
     return { 
         success, 
@@ -16,7 +18,9 @@ export const httpError = (...messages: string[]) => {
 
 export const httpMongoError = (err: any) => {
     if (!err.errors) {
-        return httpError(`Unknown error with code: ${err.code}`);
+        const message = `Unknown error with code: ${err.code}`;
+        logger.error(message);
+        return httpError(message);
     }
 
     return httpError(...Object.keys(err.errors)

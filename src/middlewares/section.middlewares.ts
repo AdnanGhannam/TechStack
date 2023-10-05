@@ -3,6 +3,7 @@ import db from "../models";
 import { httpError } from "../helpers/response.helpers";
 import { SECTION_TYPES } from "../models/Section.model";
 import { Requires } from ".";
+import logger from "../libraries/logger";
 
 const getSection: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
@@ -10,8 +11,10 @@ const getSection: RequestHandler = async (req, res, next) => {
     const section = await db.Section.findById(id).populate("articles", "title description createdAt");
 
     if (!section) {
+        const message = `Section with Id: '${id}' is not found`;
+        logger.error(message);
         return res.status(404)
-            .json(httpError(`Section with Id: '${id}' is not found`));
+            .json(httpError(message));
     }
 
     res.locals.section = section;

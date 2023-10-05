@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import db from "../models";
 import { httpError } from "../helpers/response.helpers";
 import { Requires } from ".";
+import logger from "../libraries/logger";
 
 const getArticle: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
@@ -17,8 +18,10 @@ const getArticle: RequestHandler = async (req, res, next) => {
         });
 
     if (!article) {
+        const message = `Article with Id: '${id}' is not found`;
+        logger.error(message);
         return res.status(404)
-            .json(httpError(`Article with Id: '${id}' is not found`));
+            .json(httpError(message));
     }
 
     res.locals.article = article;
