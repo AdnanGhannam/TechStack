@@ -18,6 +18,11 @@ export default class VoteModel {
             value: {
                 type: Number,
                 required: [true, "'Value' is required"]
+            },
+            votedAt: {
+                type: Number,
+                immutable: true,
+                default: Date.now()
             }
         });
     }

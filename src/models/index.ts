@@ -12,12 +12,14 @@ import AnswerModel from "./Answer.model";
 import VoteModel from "./Vote.model";
 
 const init = () => {
-    const { DB_HOST: HOST, DB_PORT: PORT, DB_NAME: NAME } = env;
+    // const { DB_HOST: HOST, DB_PORT: PORT, DB_NAME: NAME } = env;
+    const { MONGO_URI } = env;
 
-    const uri = `mongodb://${HOST}:${PORT}/${NAME}`;
+    // const uri = `mongodb://${HOST}:${PORT}/${NAME}`;
+    const uri = MONGO_URI;
 
         mongoose.connect(uri)
-            .then(() => console.info(`MongoDB connected on port: ${PORT}`))
+            .then(() => console.info(`MongoDB connected on ${uri}`))
             .catch(err => {
                 console.error("APPLICATION ERROR: MONGO_DB ERROR:\n", err)
                 process.exit(1);

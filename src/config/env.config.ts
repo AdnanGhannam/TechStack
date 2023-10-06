@@ -8,6 +8,7 @@ const env = cleanEnv(process.env, {
     DB_PORT: port(),
     DB_NAME: str(),
     SECRET: str(),
+    MONGO_URI: str(),
 });
 
 export default env;

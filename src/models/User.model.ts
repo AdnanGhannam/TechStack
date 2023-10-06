@@ -80,7 +80,6 @@ export default class UserModel {
         let matches = true;
 
         constraints.forEach(constraint => {
-            // TODO test this
             matches = matches && (password.match(constraint)?.length ?? 0) >= 1;
         });
         
