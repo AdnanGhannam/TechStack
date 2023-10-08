@@ -1,5 +1,4 @@
 import log4js from "log4js";
-import fs from "fs";
 
 const colors: { [key: string]: string }= {
   critical: '\x1b[31m',
@@ -19,9 +18,6 @@ log4js.addLayout('colored-level', config => function (logEvent) {
   const consoleMessage = `[${color}${level}${reset}]\t${gray}(${time})${reset} ${logEvent.data}`;
   const message = `[${level}]\t(${time}) ${logEvent.data}`;
   
-  let logFile = fs.createWriteStream('output.log', { flags: 'a' });
-  logFile.write(message + '\n');
-
   return consoleMessage;
 });
 
