@@ -17,7 +17,7 @@ export default class VoteModel {
             },
             value: {
                 type: Number,
-                required: [true, "'Value' is required"]
+                required: [true, "The 'Value' field is required"]
             },
             votedAt: {
                 type: Number,

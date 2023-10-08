@@ -14,7 +14,7 @@ export default class UserModel {
         return new Schema({
             name: {
                 type: String,
-                required: [true, "'Name' is required"],
+                required: [true, "The 'Name' field is required"],
                 unique: true,
                 validate: {
                     validator: function(value: string) {
@@ -25,17 +25,17 @@ export default class UserModel {
             },
             email: {
                 type: String,
-                required: [true, "'Email' is required"],
+                required: [true, "The 'Email' field is required"],
                 match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                 unique: true
             },
             phonenumber: {
                 type: String,
-                required: [true, "'Phonenumber' is required"],
+                required: [true, "The 'Phonenumber' field is required"],
             },
             password: {
                 type: String,
-                required: [true, "'Password' is required"],
+                required: [true, "The 'Password' field is required"],
             },
             privilege: {
                 type: String,

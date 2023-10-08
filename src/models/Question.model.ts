@@ -13,7 +13,7 @@ export default class QuestionModel {
         return new Schema({
             title: {
                 type: String,
-                required: [true, "'Title' is required"],
+                required: [true, "The 'Title' field is required"],
                 validate: {
                     validator: function(value: string) {
                         return value.length >= 10 && value.length <= 150;

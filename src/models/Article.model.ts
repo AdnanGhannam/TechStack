@@ -14,7 +14,7 @@ export default class ArticleModel {
         return new Schema({
             title: {
                 type: String,
-                required: [true, "'Title' is required"],
+                required: [true, "The 'Title' field is required"],
                 validate: {
                     validator: function(value: string) {
                         return value.length >= 5 && value.length <= 80;
@@ -25,11 +25,11 @@ export default class ArticleModel {
             type: {
                 type: String,
                 enum: SECTION_TYPES,
-                required: [true, "'Type' is required"]
+                required: [true, "The 'Type' field is required"]
             },
             description: {
                 type: String,
-                required: [true, "'Description' is required"],
+                required: [true, "The 'Description' field is required"],
                 validate: {
                     validator: function(value: string) {
                         return value.length <= 500;
@@ -39,7 +39,7 @@ export default class ArticleModel {
             },
             content: {
                 type: String,
-                required: [true, "'Content' is required"]
+                required: [true, "The 'Content' field is required"]
             },
             createdAt: {
                 type: Number,

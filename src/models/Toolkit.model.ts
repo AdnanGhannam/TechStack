@@ -20,12 +20,12 @@ export default class ToolkitModel {
                     },
                     message: (props: any) => `'${props.path}' should be between 1 and 30 characters, your input is ${props.value.length} characters long.` 
                 },
-                required: [true, "'Name' is required"],
+                required: [true, "The 'Name' field is required"],
                 unique: true
             },
             description: {
                 type: String,
-                required: [true, "'Description' is required"],
+                required: [true, "The 'Description' field is required"],
                 validate: {
                     validator: function(value: string) {
                         return value.length >= 10 && value.length <= 500;
@@ -36,7 +36,7 @@ export default class ToolkitModel {
             type: {
                 type: String,
                 enum: TOOLKIT_TYPES,
-                required: [true, "'Type' is required"],
+                required: [true, "The 'Type' field is required"],
                 default: TOOLKIT_TYPES[0]
             },
             creator: {
@@ -59,7 +59,7 @@ export default class ToolkitModel {
             },
             company: {
                 type: String,
-                required: [true, "'Company' is required"],
+                required: [true, "The 'Company' field is required"],
             }
         });
     }

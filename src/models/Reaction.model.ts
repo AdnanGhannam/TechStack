@@ -13,7 +13,7 @@ export default class ReactionModel {
             type: {
                 type: String,
                 enum: REACTION_TYPES,
-                required: [true, "'Type' is required"]
+                required: [true, "The 'Type' field is required"]
             },
             user: {
                 type: Types.ObjectId,

@@ -19,12 +19,12 @@ export default class SectionModel {
                     },
                     message: (props: any) => `'${props.path}' should be between 5 and 80 characters, your input is ${props.value.length} characters long.` 
                 },
-                required: [true, "'Title' is required"]
+                required: [true, "The 'Title' field is required"]
             },
             type: {
                 type: String,
                 enum: SECTION_TYPES,
-                required: [true, "'Type' is required"]
+                required: [true, "The 'Type' field is required"]
             },
             createdAt: {
                 type: Number,

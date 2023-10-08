@@ -20,7 +20,7 @@ export default class AnswerModel {
             },
             content: {
                 type: String,
-                required: [true, "'Content' is required"],
+                required: [true, "The 'Content' field is required"],
             },
             createdAt: {
                 type: Number,

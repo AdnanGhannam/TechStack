@@ -19,7 +19,7 @@ export default class FeedbackModel {
             },
             text: {
                 type: String,
-                required: [true, "'Text' is required"],
+                required: [true, "The 'Text' field is required"],
                 validate: {
                     validator: function(value: string) {
                         return value.length <= 500;
