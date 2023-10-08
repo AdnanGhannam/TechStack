@@ -16,7 +16,7 @@ pids
 
 # build directories
 build/
-dist/
+# dist/
 
 # environment variables
 .env
