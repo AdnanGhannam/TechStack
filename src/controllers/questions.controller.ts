@@ -60,7 +60,8 @@ const updateEndpoint: RequestHandler = (req, res) => {
     tryHandle(res, async () => {
         await question.updateOne({
             title: title ?? question.title,
-            content: content ?? question.content
+            content: content ?? question.content,
+            lastModifyAt: Date.now()
         }, { runValidators: true });
 
         logger.info(`Update question with Id: '${question.id}' by user with Id: '${user.id}'`);

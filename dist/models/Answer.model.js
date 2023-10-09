@@ -27,7 +27,8 @@ class AnswerModel {
                 default: Date.now()
             },
             lastModifyAt: {
-                type: Number
+                type: Number,
+                default: Date.now()
             },
             votes: [{
                     type: mongoose_1.Types.ObjectId,

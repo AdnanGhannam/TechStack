@@ -11,7 +11,10 @@ const updateEndpoint: RequestHandler = (req, res) => {
     const { content } = res.locals;
 
     tryHandle(res, async () => {
-        await answer.updateOne({ content }, { runValidators: true });
+        await answer.updateOne({
+            content,
+            lastModifyAt: Date.now()
+        }, { runValidators: true });
 
         logger.info(`Update answer with Id: '${answer.id}'`);
         res.status(204).end();

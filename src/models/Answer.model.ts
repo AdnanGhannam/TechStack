@@ -28,7 +28,8 @@ export default class AnswerModel {
                 default: Date.now()
             },
             lastModifyAt: {
-                type: Number
+                type: Number,
+                default: Date.now()
             },
             votes: [{
                 type: Types.ObjectId,

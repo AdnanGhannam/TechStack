@@ -49,7 +49,8 @@ const updateEndpoint = (req, res) => {
     (0, controller_helpers_1.tryHandle)(res, () => __awaiter(void 0, void 0, void 0, function* () {
         yield question.updateOne({
             title: title !== null && title !== void 0 ? title : question.title,
-            content: content !== null && content !== void 0 ? content : question.content
+            content: content !== null && content !== void 0 ? content : question.content,
+            lastModifyAt: Date.now()
         }, { runValidators: true });
         logger_1.default.info(`Update question with Id: '${question.id}' by user with Id: '${user.id}'`);
         res.status(204).end();

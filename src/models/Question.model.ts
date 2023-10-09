@@ -31,7 +31,8 @@ export default class QuestionModel {
                 default: Date.now()
             },
             lastModifyAt: {
-                type: Number
+                type: Number,
+                default: Date.now()
             },
             views: {
                 type: Number,

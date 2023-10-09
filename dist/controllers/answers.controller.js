@@ -19,7 +19,10 @@ const updateEndpoint = (req, res) => {
     const { answer } = res.locals;
     const { content } = res.locals;
     (0, controller_helpers_1.tryHandle)(res, () => __awaiter(void 0, void 0, void 0, function* () {
-        yield answer.updateOne({ content }, { runValidators: true });
+        yield answer.updateOne({
+            content,
+            lastModifyAt: Date.now()
+        }, { runValidators: true });
         logger_1.default.info(`Update answer with Id: '${answer.id}'`);
         res.status(204).end();
     }));
