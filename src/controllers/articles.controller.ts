@@ -7,21 +7,35 @@ import { UserDocument } from "../models/User.model";
 import { ReactionDocument } from "../models/Reaction.model";
 import IArticlesController from "../interfaces/IArticlesController";
 import logger from "../libraries/logger";
+import { ToolkitDocument } from "../models/Toolkit.model";
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
-    const articles = await db.Article.find({ })
-        .populate({
-            path: "creators",
-            options: { limit: 1 }
-        })
-        .populate({
-            path: "section",
-            select: "title"
-        })
+    const sections = await db.Section.find({ })
+        .populate("articles")
         .populate({
             path: "toolkit",
             select: "name"
         });
+
+    const articles: ArticleDocument[] & any[] = [];
+
+    sections.forEach(section => {
+        section.toObject().articles.forEach((article, index) => {
+            articles.push({
+                ...article,
+                toolkit: {
+                    _id: (<ToolkitDocument> section.toolkit).id,
+                    name: (<ToolkitDocument> section.toolkit).name
+                },
+                section: {
+                    _id: section.id,
+                    title: section.title
+                },
+                order: index
+            });
+        });
+    })
+    
 
     logger.info(`Return all articles`);
     res.json(httpSuccess(articles));

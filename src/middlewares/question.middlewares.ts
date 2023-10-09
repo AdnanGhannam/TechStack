@@ -10,6 +10,7 @@ const getQuestion: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
 
     const question = await db.Question.findById(id)
+        .populate("toolkit", "name")
         .populate("user")
         .populate("votes")
         .populate({

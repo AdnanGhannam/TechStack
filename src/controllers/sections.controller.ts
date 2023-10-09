@@ -8,12 +8,25 @@ import ISectionsController from "../interfaces/ISectionsController";
 import logger from "../libraries/logger";
 
 const getAllEndpoint: RequestHandler = async (req, res) => {
-    const sections = await db.Section.find({})
-        .populate("creator")
-        .populate({
-            path: "toolkit",
-            select: "name"
+    const toolkits = await db.Toolkit.find({ }).populate({
+        path: "sections",
+        populate: "creator"
+    });
+
+    const sections: SectionDocument[] & any[] = [];
+
+    toolkits.forEach(toolkit => {
+        toolkit.toObject().sections.forEach((section, index) => {
+            sections.push({
+                ...section, 
+                toolkit: {
+                    _id: toolkit.id,
+                    name: toolkit.name
+                }, 
+                order: index
+            });
         });
+    });
 
     logger.info(`Return all sections`);
     res.json(httpSuccess(sections));
