@@ -29,7 +29,7 @@ export default class SectionModel {
             createdAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             },
             creator: {
                 type: Types.ObjectId,

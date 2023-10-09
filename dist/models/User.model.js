@@ -47,7 +47,7 @@ class UserModel {
             joinedAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             },
             userCollection: {
                 type: mongoose_1.Types.ObjectId,

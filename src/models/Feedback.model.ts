@@ -30,7 +30,7 @@ export default class FeedbackModel {
             sentAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             }
         });
     }

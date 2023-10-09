@@ -24,11 +24,11 @@ class AnswerModel {
             createdAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             },
             lastModifyAt: {
                 type: Number,
-                default: Date.now()
+                default: Date.now
             },
             votes: [{
                     type: mongoose_1.Types.ObjectId,

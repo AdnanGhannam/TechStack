@@ -14,7 +14,7 @@ class CollectionModel {
             lastModifyAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             }
         });
     }

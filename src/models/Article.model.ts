@@ -44,7 +44,7 @@ export default class ArticleModel {
             createdAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             },
             creators: [{
                 type: Types.ObjectId,

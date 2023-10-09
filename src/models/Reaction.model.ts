@@ -26,7 +26,7 @@ export default class ReactionModel {
             reactedAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             }
         });
     }

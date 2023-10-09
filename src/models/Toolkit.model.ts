@@ -55,7 +55,7 @@ export default class ToolkitModel {
             createdAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             },
             company: {
                 type: String,

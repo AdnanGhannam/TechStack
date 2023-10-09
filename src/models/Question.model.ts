@@ -28,11 +28,11 @@ export default class QuestionModel {
             createdAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             },
             lastModifyAt: {
                 type: Number,
-                default: Date.now()
+                default: Date.now
             },
             views: {
                 type: Number,

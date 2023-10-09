@@ -43,7 +43,7 @@ class ArticleModel {
             createdAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             },
             creators: [{
                     type: mongoose_1.Types.ObjectId,

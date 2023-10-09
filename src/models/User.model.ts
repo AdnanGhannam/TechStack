@@ -45,7 +45,7 @@ export default class UserModel {
             joinedAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             },
             userCollection: {
                 type: Types.ObjectId,

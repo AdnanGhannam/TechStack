@@ -25,11 +25,11 @@ export default class AnswerModel {
             createdAt: {
                 type: Number,
                 immutable: true,
-                default: Date.now()
+                default: Date.now
             },
             lastModifyAt: {
                 type: Number,
-                default: Date.now()
+                default: Date.now
             },
             votes: [{
                 type: Types.ObjectId,
