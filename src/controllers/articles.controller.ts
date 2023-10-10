@@ -60,7 +60,7 @@ const getPopulareEndpoint: RequestHandler = async (req, res) => {
 };
 
 const updateEndpoint: RequestHandler = (req, res) => {
-    const { title, description, content } = res.locals;
+    const { title, description, content, order } = res.locals;
     const { 
         article, 
         loginUser: user 
@@ -80,6 +80,29 @@ const updateEndpoint: RequestHandler = (req, res) => {
             content: content || article.content,
             lastUpdateFrom: user.id
         }, { runValidators: true });
+
+        if (order != '' && order >= 0) {
+            const section = await db.Section.findById(article.section);
+
+            if (!section) {
+                res.status(204).end();
+                return;
+            }
+
+            await section.updateOne({ 
+                $pull: { articles: article.id }
+            });
+
+            await section.updateOne({
+                $push: {
+                    articles: {
+                        $each: [article],
+                        $position: order
+                    }
+                }
+            });
+        }
+
 
         logger.info(`Update article with Id: '${article.id}' by admin with Id: '${user.id}'`);
         res.status(204).end();

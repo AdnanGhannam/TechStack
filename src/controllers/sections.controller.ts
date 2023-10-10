@@ -40,7 +40,7 @@ const getByIdEndpoint: RequestHandler = (req, res) => {
 };
 
 const updateEndpoint: RequestHandler = (req, res) => {
-    const { title, type } = res.locals;
+    const { title, type, order } = res.locals;
     const { section, loginUser: user } = res.locals as { 
         section: SectionDocument,
         loginUser: UserDocument
@@ -51,6 +51,28 @@ const updateEndpoint: RequestHandler = (req, res) => {
             title: title || section.title,
             type: type || section.type
         });
+
+        if (order != '' && order >= 0) {
+            const toolkit = await db.Toolkit.findById(section.toolkit);
+
+            if (!toolkit) {
+                res.status(204).end();
+                return;
+            }
+
+            await toolkit.updateOne({ 
+                $pull: { sections: section.id }
+            });
+
+            await toolkit.updateOne({
+                $push: {
+                    sections: {
+                        $each: [section],
+                        $position: order
+                    }
+                }
+            });
+        }
 
         logger.info(`Update section with Id: '${section.id}' by admin with Id: '${user.id}'`);
         res.status(204).end();

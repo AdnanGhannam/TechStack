@@ -4,7 +4,7 @@ import { httpError } from "../helpers/response.helpers";
 type Routes = (app: Express) => void;
 
 const config = (app: Express, ...routes: Array<Routes>) => {
-    app.get('/', (req, res) => res.json("Everything is working"));
+    app.get('/', (req, res) => res.json("Everything is working!"));
     routes.forEach(route => route(app));
     app.all("*", (req, res) => {
         res.status(404)

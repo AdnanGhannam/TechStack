@@ -18,8 +18,9 @@ export const httpError = (...messages: string[]) => {
 
 export const httpMongoError = (err: any) => {
     if (!err.errors) {
-        const message = `Unknown error with code: ${err.code}`;
-        logger.error(message);
+        console.log(err)
+        const message = `Unknown error`;
+        logger.error(message + ' with code: ' + err.code);
         return httpError(message);
     }
 
