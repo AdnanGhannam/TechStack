@@ -155,7 +155,8 @@ const answerEndpoint: RequestHandler = (req, res) => {
     tryHandle(res, async () => {
         const answer = await db.Answer.create({
             user: user.id,
-            content
+            content,
+            question: question.id
         });
 
         await question.updateOne({ $push: { answers: answer.id } });

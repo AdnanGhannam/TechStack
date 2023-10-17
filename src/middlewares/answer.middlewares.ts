@@ -4,11 +4,16 @@ import db from "../models";
 import { AnswerDocument } from "../models/Answer.model";
 import { UserDocument } from "../models/User.model";
 import logger from "../libraries/logger";
+import { QuestionDocument } from "../models/Question.model";
 
 const getAnswer: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
 
-    const answer = await db.Answer.findById(id);
+    const answer = await db.Answer.findById(id)
+        .populate({
+            path: "question",
+            select: "user"
+        });
 
     if (!answer) {
         const message = `Answer with Id: '${id}' is not found`;
@@ -38,10 +43,10 @@ const getBody: RequestHandler = (req, res, next) => {
 const canModify: RequestHandler = (req, res, next) => {
     const { loginUser: user, answer } = res.locals as {
         loginUser: UserDocument,
-        answer: AnswerDocument
+        answer: AnswerDocument & { question: QuestionDocument }
     };
 
-    if (answer.user != user && user.privilege != "administrator") {
+    if (answer.question.user != user.id && user.privilege != "administrator") {
         logger.error(`User with Id: '${user.id}' tried to modify answer with Id: '${answer.id}'`);
         return res.status(401)
             .json(httpError("You don't have privilege to make this action"));
